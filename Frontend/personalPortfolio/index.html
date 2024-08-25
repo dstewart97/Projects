@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Portfolio</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- NAV BAR -->
+    <nav>
+        <div class="container nav_container">
+            <a href="index.html">JED LABS</a>
+            <button class="nav_theme-btn">
+                <i class="uil uil-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- FLOATING NAV -->
+    <menu class="floating_nav">
+        <a href="#" class="active"><i class="uil uil-estate"></i></a>
+        <a href="#resume"><i class="uil uil-user"></i></a>
+        <a href="#projects"><i class="uil uil-images"></i></a>
+        <a href="#faqs"><i class="uil uil-smile-dizzy"></i></a>
+        <a href="#contact"><i class="uil uil-phone"></i></a>
+    </menu>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header_container">
+            <div class="header_image" data-aos="fade-up" data-aos-delay="500">
+                <img src="./media/me.jpg" alt="Header Image">
+            </div>
+            <h5 data-aos="fade-in">Hi, I'm David</h5>
+            <h1 data-aos="fade-in">Fullstack <span>Web Developer</span><br />Base in Las Vegas</h1>
+            <p data-aos="fade-in">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Fugit deserunt consequatur magnam quod, nam eveniet.
+            </p>
+            <div class="header_cta" data-aos="fade-in">
+                <a href="#projects" class="btn">My Projects</a>
+                <a href="#contact" class="btn primary">Hire me</a>
+            </div>
+
+            <menu class="header_socials">
+                <a href="https://github.com/dstewart97"><i class="uil uil-github-alt"></i></a>
+                <a href="#"><i class="uil uil-facebook-f"></i></a>
+                <a href="#"><i class="uil uil-dribbble"></i></a>
+                <a href="https://www.linkedin.com/in/davidjstewart/"><i class="uil uil-linkedin-alt"></i></a>
+            </menu>
+        </div>
+    </header>
+
+    <!-- RESUME -->
+    <section id="resume">
+        <div class="container resume_container" data-aos="fade-in" data-aos-delay="200">
+            <div class="resume_left">
+                <h1>Why hire me?</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                <menu>
+                    <button class="btn primary experience_btn">Experience</button>
+                    <button class="btn education_btn">Education</button>
+                    <button class="btn skills_btn">Skills</button>
+                    <button class="btn about_btn">About me</button>
+                </menu>
+            </div>
+            <div class="resume_right">
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- PROJECTS -->
+
+    <section class="projects" id="projects">
+        <h1 data-aos="fade-in" data-aos-delay="200">Recent Projects</h1>
+        <p data-aos="fade-in" data-aos-delay="200">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus enim distinctio vel esse?
+        </p>
+        <menu class="projects_categories" data-aos="fade-in" data-aos-delay="200">
+            <button class="btn" data-filter="*">All</button>
+            <button class="btn" data-filter=".frontend">Frontend</button>
+            <button class="btn" data-filter=".backend">Backend</button>
+            <button class="btn" data-filter=".fullstack">Fullstack</button>
+        </menu>
+        <div class="container projects_container" data-aos="fade-in" data-aos-delay="200">
+            <article class="project mix fullstack" data-order="1">
+                <div class="project_image">
+                    <img src="./media/project1.jpg" alt="Project1">
+                </div>
+                <h5>Project One Title (Fullstack)</h5>
+                <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis, eligendi? Nostrum adipisci nihil
+                    optio quaerat?
+                </p>
+                <div class="project_cta">
+                    <a href="#" class="btn primary" target="_blank">
+                        <i class="uil uil-link"></i>
+                    </a>
+                    <a href="#" class="btn" target="_blank">
+                        <i class="uil uil-github-alt"></i>
+                    </a>
+                </div>
+            </article>
+            <article class="project mix frontend" data-order="2">
+                <div class="project_image">
+                    <img src="./media/project2.jpg" alt="Project2">
+                </div>
+                <h5>Project Two Title (Frontend)</h5>
+                <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis, eligendi? Nostrum adipisci nihil
+                    optio quaerat?
+                </p>
+                <div class="project_cta">
+                    <a href="#" class="btn primary" target="_blank">
+                        <i class="uil uil-link"></i>
+                    </a>
+                    <a href="#" class="btn" target="_blank">
+                        <i class="uil uil-github-alt"></i>
+                    </a>
+                </div>
+            </article>
+            <article class="project mix fullstack" data-order="3">
+                <div class="project_image">
+                    <img src="./media/project3.jpg" alt="Project3">
+                </div>
+                <h5>Project Three Title (Fullstack)</h5>
+                <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis, eligendi? Nostrum adipisci nihil
+                    optio quaerat?
+                </p>
+                <div class="project_cta">
+                    <a href="#" class="btn primary" target="_blank">
+                        <i class="uil uil-link"></i>
+                    </a>
+                    <a href="#" class="btn" target="_blank">
+                        <i class="uil uil-github-alt"></i>
+                    </a>
+                </div>
+            </article>
+            <article class="project mix frontend" data-order="4">
+                <div class="project_image">
+                    <img src="./media/project4.jpg" alt="Project4">
+                </div>
+                <h5>Project Four Title (Frontend)</h5>
+                <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis, eligendi? Nostrum adipisci nihil
+                    optio quaerat?
+                </p>
+                <div class="project_cta">
+                    <a href="#" class="btn primary" target="_blank">
+                        <i class="uil uil-link"></i>
+                    </a>
+                    <a href="#" class="btn" target="_blank">
+                        <i class="uil uil-github-alt"></i>
+                    </a>
+                </div>
+            </article>
+            <article class="project mix frontend" data-order="5">
+                <div class="project_image">
+                    <img src="./media/project5.jpg" alt="Project5">
+                </div>
+                <h5>Project Five Title (Frontend)</h5>
+                <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis, eligendi? Nostrum adipisci nihil
+                    optio quaerat?
+                </p>
+                <div class="project_cta">
+                    <a href="#" class="btn primary" target="_blank">
+                        <i class="uil uil-link"></i>
+                    </a>
+                    <a href="#" class="btn" target="_blank">
+                        <i class="uil uil-github-alt"></i>
+                    </a>
+                </div>
+            </article>
+            <article class="project mix backend" data-order="6">
+                <div class="project_image">
+                    <img src="./media/project6.jpg" alt="Project6">
+                </div>
+                <h5>Project Six Title (Backend)</h5>
+                <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis, eligendi? Nostrum adipisci nihil
+                    optio quaerat?
+                </p>
+                <div class="project_cta">
+                    <a href="#" class="btn primary" target="_blank">
+                        <i class="uil uil-link"></i>
+                    </a>
+                    <a href="#" class="btn" target="_blank">
+                        <i class="uil uil-github-alt"></i>
+                    </a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="swiper">
+        <h1>What my clients say</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        <div class="container swiper">
+            <div class="swiper-wrapper">
+                <figure class="swiper-slide">
+                    <figcaption>
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                        Eaque qui dolorem officia, ea necessitatibus quisquam ipsa
+                        quibusdam optio animi reiciendis?
+                    </figcaption>
+                    <div class="swiper_client">
+                        <div class="swiper_client-avatar">
+                            <img src="./media/avatar1.jpg" alt="Client1">
+                        </div>
+                        <div class="swiper_client-details">
+                            <h5>Nana Ana McBrown</h5>
+                            <small>Actress</small>
+                        </div>
+                    </div>
+                </figure>
+                <figure class="swiper-slide">
+                    <figcaption>
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                        Eaque qui dolorem officia, ea necessitatibus quisquam ipsa
+                        quibusdam optio animi reiciendis?
+                    </figcaption>
+                    <div class="swiper_client">
+                        <div class="swiper_client-avatar">
+                            <img src="./media/avatar1.jpg" alt="Client1">
+                        </div>
+                        <div class="swiper_client-details">
+                            <h5>Nana Ana McBrown</h5>
+                            <small>Actress</small>
+                        </div>
+                    </div>
+                </figure>
+                <figure class="swiper-slide">
+                    <figcaption>
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                        Eaque qui dolorem officia, ea necessitatibus quisquam ipsa
+                        quibusdam optio animi reiciendis?
+                    </figcaption>
+                    <div class="swiper_client">
+                        <div class="swiper_client-avatar">
+                            <img src="./media/avatar1.jpg" alt="Client1">
+                        </div>
+                        <div class="swiper_client-details">
+                            <h5>Nana Ana McBrown</h5>
+                            <small>Actress</small>
+                        </div>
+                    </div>
+                </figure>
+                <figure class="swiper-slide">
+                    <figcaption>
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                        Eaque qui dolorem officia, ea necessitatibus quisquam ipsa
+                        quibusdam optio animi reiciendis?
+                    </figcaption>
+                    <div class="swiper_client">
+                        <div class="swiper_client-avatar">
+                            <img src="./media/avatar1.jpg" alt="Client1">
+                        </div>
+                        <div class="swiper_client-details">
+                            <h5>Nana Ana McBrown</h5>
+                            <small>Actress</small>
+                        </div>
+                    </div>
+                </figure>
+                <figure class="swiper-slide">
+                    <figcaption>
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                        Eaque qui dolorem officia, ea necessitatibus quisquam ipsa
+                        quibusdam optio animi reiciendis?
+                    </figcaption>
+                    <div class="swiper_client">
+                        <div class="swiper_client-avatar">
+                            <img src="./media/avatar1.jpg" alt="Client1">
+                        </div>
+                        <div class="swiper_client-details">
+                            <h5>Nana Ana McBrown</h5>
+                            <small>Actress</small>
+                        </div>
+                    </div>
+                </figure>
+                <figure class="swiper-slide">
+                    <figcaption>
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                        Eaque qui dolorem officia, ea necessitatibus quisquam ipsa
+                        quibusdam optio animi reiciendis?
+                    </figcaption>
+                    <div class="swiper_client">
+                        <div class="swiper_client-avatar">
+                            <img src="./media/avatar1.jpg" alt="Client1">
+                        </div>
+                        <div class="swiper_client-details">
+                            <h5>Nana Ana McBrown</h5>
+                            <small>Actress</small>
+                        </div>
+                    </div>
+                </figure>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+
+
+    <!-- FAQs -->
+    <section id="faqs">
+        <h1>Frequently Asked Questions</h1>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+            Vero consectetur culpa porro eveniet consequuntur explicabo.</p>
+        <menu class="container faqs_container">
+            <li class="faqs_item" data-aos="fade-in" data-aos-delay="200">
+                <div class="faqs_item-top">
+                    <span class="faq_icon"><i class="uil uil-angle-down"></i></span>
+                    <h5>What's your hourly rate?</h5>
+                </div>
+                <div class="faqs_item-bottom">
+                    <span></span> <!-- empty span for alignment using grid -->
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Aperiam ipsa provident fugit facere vitae, sunt praesentium
+                        quis beatae, itaque quo voluptatibus impedit mollitia dolorum
+                        inventore sint nisi? Voluptate, illum dignissimos.
+                    </p>
+                </div>
+            </li>
+            <li class="faqs_item" data-aos="fade-in" data-aos-delay="200">
+                <div class="faqs_item-top">
+                    <span class="faq_icon"><i class="uil uil-angle-down"></i></span>
+                    <h5>How much do you charge per project?</h5>
+                </div>
+                <div class="faqs_item-bottom">
+                    <span></span> <!-- empty span for alignment using grid -->
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Aperiam ipsa provident fugit facere vitae, sunt praesentium
+                        quis beatae, itaque quo voluptatibus impedit mollitia dolorum
+                        inventore sint nisi? Voluptate, illum dignissimos.
+                    </p>
+                </div>
+            </li>
+            <li class="faqs_item" data-aos="fade-in" data-aos-delay="400">
+                <div class="faqs_item-top">
+                    <span class="faq_icon"><i class="uil uil-angle-down"></i></span>
+                    <h5>Do you work alone or as a team?</h5>
+                </div>
+                <div class="faqs_item-bottom">
+                    <span></span> <!-- empty span for alignment using grid -->
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Aperiam ipsa provident fugit facere vitae, sunt praesentium
+                        quis beatae, itaque quo voluptatibus impedit mollitia dolorum
+                        inventore sint nisi? Voluptate, illum dignissimos.
+                    </p>
+                </div>
+            </li>
+            <li class="faqs_item" data-aos="fade-in" data-aos-delay="400">
+                <div class="faqs_item-top">
+                    <span class="faq_icon"><i class="uil uil-angle-down"></i></span>
+                    <h5>What are your off days?</h5>
+                </div>
+                <div class="faqs_item-bottom">
+                    <span></span> <!-- empty span for alignment using grid -->
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Aperiam ipsa provident fugit facere vitae, sunt praesentium
+                        quis beatae, itaque quo voluptatibus impedit mollitia dolorum
+                        inventore sint nisi? Voluptate, illum dignissimos.
+                    </p>
+                </div>
+            </li>
+            <li class="faqs_item" data-aos="fade-in" data-aos-delay="600">
+                <div class="faqs_item-top">
+                    <span class="faq_icon"><i class="uil uil-angle-down"></i></span>
+                    <h5>Are you available for collaborations?</h5>
+                </div>
+                <div class="faqs_item-bottom">
+                    <span></span> <!-- empty span for alignment using grid -->
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Aperiam ipsa provident fugit facere vitae, sunt praesentium
+                        quis beatae, itaque quo voluptatibus impedit mollitia dolorum
+                        inventore sint nisi? Voluptate, illum dignissimos.
+                    </p>
+                </div>
+            </li>
+            <li class="faqs_item" data-aos="fade-in" data-aos-delay="600">
+                <div class="faqs_item-top">
+                    <span class="faq_icon"><i class="uil uil-angle-down"></i></span>
+                    <h5>What's your average return time?</h5>
+                </div>
+                <div class="faqs_item-bottom">
+                    <span></span> <!-- empty span for alignment using grid -->
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Aperiam ipsa provident fugit facere vitae, sunt praesentium
+                        quis beatae, itaque quo voluptatibus impedit mollitia dolorum
+                        inventore sint nisi? Voluptate, illum dignissimos.
+                    </p>
+                </div>
+            </li>
+        </menu>
+    </section>
+
+    <!-- CONTACT -->
+
+    <section id="contact">
+        <div class="container contact_container">
+            <menu class="contact_options">
+                <a href="mailto:djstewart97@gmail.com" class="contact_option" target="_blank">
+                    <i class="uil uil-envelope"></i>
+                </a>
+                <a href="https://www.messenger.com/t/100087217880007" class="contact_option" target="_blank">
+                    <i class="uil uil-facebook-messenger-alt"></i>
+                </a>
+                <a href="https://wa.me/+17024490621" class="contact_option" target="_blank">
+                    <i class="uil uil-whatsapp"></i>
+                </a>
+                <a href="tel:+17024490621" class="contact_option" target="_blank">
+                    <i class="uil uil-phone"></i>
+                </a>
+            </menu>
+            <form action="https://formsubmit.co/djstewart97@gmail.com" method="POST" data-aos="fade-up" data-aos-delay="200">
+                <input type="text" name="Name" placeholder="Full Name">
+                <input type="email" name="Email" placeholder="Email Address">
+                <textarea rows= '7' name="Message" placeholder="Message"></textarea>
+                <button type="submit" class="btn primary">Send</button>
+            </form>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init({duration: 2000, offset: 80});
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="./mixitup-v3/patrickkunka-mixitup-61dac05/dist/mixitup.min.js"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>

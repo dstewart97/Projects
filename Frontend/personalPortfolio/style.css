@@ -1,0 +1,693 @@
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    border: 0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-primary: #156bd4;
+    --color-primary-variant: rgba(21, 107, 212, 0.5);
+    --color-gray-0: #fff;
+    --color-gray-50: #edecec;
+    --color-gray-100: #e6e5e5;
+    --color-gray-200: #c0c0c0;
+    --color-gray-300: #a1a1a1;
+    --color-gray-400: #919191;
+    --color-gray-500: #7b7b7b;
+    --color-gray-600: #545454;
+    --color-gray-700: #313131;
+    --color-gray-800: #1f1f1f;
+    --color-gray-900: #0e0e0e; 
+
+    --container-w-lg: 74%;
+    --container-w-sm: 94%;
+
+    --transition: all 350ms ease;
+
+    --swiper-pagination-color: var(--color-primary);
+}
+
+.dark-theme-variables {
+    --color-gray-0: #0e0d14;
+    --color-gray-50: #211f22;
+    --color-gray-100: #252233;
+    --color-gray-200: #545454;
+    --color-gray-300: #7b7b7b;
+    --color-gray-400: #919191;
+    --color-gray-500: #a1a1a1;
+    --color-gray-600: #c0c0c0;
+    --color-gray-700: #e6e5e5;
+    --color-gray-800: #fafafa;
+    --color-gray-900: #fff; 
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+    background: rgba(11, 48, 185, 0.25);
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+}
+
+body {
+    font-family: "Montserrat", sans-serif;
+    line-height: 1.6;
+    background: var(--color-gray-0);
+    font-size: 0.9rem;
+    color: var(--color-gray-800);
+    user-select: none;
+}
+
+.container {
+    width: var(--container-w-lg);
+    margin-inline: auto;
+}
+
+img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.1;
+    color: var(--color-gray-900);
+    font-weight: 900;
+}
+
+h1 {
+    font-size: 1.8rem;
+}
+
+h2 {
+    font-size: 1.6rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+}
+
+h4 {
+    font-size: 1.2rem;
+}
+
+h5 {
+    font-size: 1rem;
+}
+
+h6 {
+    font-size: 0.8rem;
+}
+
+a {
+    transition: var(--transition);
+}
+
+.btn {
+    background: var(--color-gray-0);
+    border: 2px solid var(--color-gray-100);
+    color: var(--color-gray-900);
+    font-weight: 500;
+    padding: 0.8rem 1.7rem;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.btn.primary {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.btn:hover {
+    background: var(--color-primary-variant);
+    border-color: transparent;
+}
+
+section {
+    padding: 10rem 0;
+
+}
+
+section:nth-child(even) {
+    background: var(--color-gray-50);
+}
+
+section > h1, section > p {
+    text-align: center;
+    margin-top: 0.5rem;
+    width: 30rem;
+    margin-inline: auto;
+}
+
+
+
+/* ========== NAVBAR ========= */
+
+nav {
+    background: var(--color-primary);
+    width: 100vw;
+    height: 3rem;
+    display: grid;
+    place-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9;
+}
+
+.nav_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav_container a {
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.nav_theme-btn {
+    background: transparent;
+    color: white;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+/* ========== FLOATING NAV ========= */
+
+.floating_nav {
+    position: fixed;
+    left: 50%;
+    bottom: -8rem;
+    transform: translateX(-50%) scale(0);
+    background: rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    width: fit-content;
+    height: 4.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+    padding: 0.7rem;
+    border-radius: 2.2rem;
+    opacity: 0;
+    z-index: 9;
+    animation: animatefloatingNav 1s 2s ease forwards;
+}
+
+/* background for dark theme */
+.dark-theme-variables .floating_nav {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes animatefloatingNav {
+    to {
+        bottom: 1.5rem;
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+.floating_nav a {
+    color: var(--color-gray-900);
+    width: 3.2rem;
+    aspect-ratio: 1/1;
+    display: grid;  
+    place-items: center;
+    border-radius: 50%;
+    font-size: 1rem;
+}
+
+.floating_nav a:hover {
+    background: var(--color-gray-0);
+}
+
+.floating_nav a.active {
+    background: var(--color-primary);
+    color: white;
+}
+
+
+
+/* ========== HEADER ========= */
+
+header {
+    margin-top: 3rem;
+    height: calc(100vh - 3rem);
+    display: grid;
+    place-items: center ;
+}
+
+/* make background gradient on dark theme */
+.dark-theme-variables header {
+    background: linear-gradient(var(--color-gray-100),
+    var(--color-gray-0));
+}
+
+.header_container {
+    width: 36rem;
+    text-align: center;
+}
+
+.header_image {
+    width: 12rem;
+    height: 14rem;
+    border-radius: 6rem 6rem 2rem 2rem;
+    overflow: hidden;
+    margin-inline: auto;
+    margin-bottom: 2rem;
+}
+
+.header_image img {
+    height: 100%;
+}
+
+.header_container h1 {
+    margin: 0.8rem 0 0.1rem;
+}
+
+.header_container h1 span {
+    color: var(--color-primary);
+}
+
+.header_cta {
+    margin-top: 1.8rem;
+    display: flex;
+    gap: 1rem;
+    margin-inline: auto;
+    width: fit-content;
+}
+
+.header_socials {
+    position: absolute;
+    right: 10%;
+    bottom: 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.header_socials a{
+    background-color: var(--color-gray-100);
+    color: var(--color-primary);
+    width: 2.2rem;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.6rem;
+    transition: var(--transition);
+}
+
+.header_socials a:hover {
+    background: var(--color-primary);
+    color: var(--color-gray-0);
+}
+
+
+/* ========== RESUME ========= */
+
+.resume_container {
+    display: grid;
+    grid-template-columns: 14rem auto;
+    gap: 7rem; 
+    width: 60%;   
+}
+
+.resume_left p {
+    margin: 0.5rem 0 1rem;
+}
+
+.resume_left menu {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.resume_left menu button {
+    border-color: var(--color-gray-0);
+}
+
+.resume_right h4 {
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
+}
+
+.resume_right > p {
+    margin-bottom: 1.5rem;
+}
+
+.resume_right ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.resume_right ul li {
+    background: var(--color-gray-0);
+    padding: 1.5rem;
+    border: 0.4rem solid var(--color-gray-0);
+    transition: var(--transition);
+    cursor: default;
+}
+
+.resume_right ul li:hover {
+    background: transparent;
+}
+
+.resume_right li h6 {
+    color: var(--color-gray-500);
+}
+
+.resume_right li h5 {
+    color: var(--color-primary);
+    margin: 0.8rem 0;
+}
+
+/* education */
+.resume_right.education ul {
+    grid-template-columns: 1fr;
+}
+
+.resume_right.education li h5 {
+    margin-top: 0;
+} 
+
+/* skills */
+.resume_right.skills ul {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2rem;
+}
+
+.resume_right.skills ul li {
+    padding: 1rem;
+}
+
+/* about */
+.resume_right.about ul {
+    gap: 0;
+}
+
+.resume_right.about ul li {
+    background: transparent;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    gap: 0.3rem;
+    border: 0;
+}
+
+.resume_right.about li h6 {
+    color: var(--color-gray-500);
+}
+
+.resume_right.about li h5 {
+    color: var(--color-gray-900);
+}
+
+/* ========== PROJECTS ========= */
+
+.projects_categories {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem 0 2.5rem;
+    flex-wrap: wrap;
+}
+
+.projects_categories button.mixitup-control-active {
+    background: var(--color-primary);
+    color: white;
+}
+
+.projects_container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: 4rem;
+}
+
+.project {
+    background: var(--color-gray-100);
+    transition: var(--transition);
+    padding-bottom: 1.5rem;
+    border: 0.5rem solid var(--color-gray-100);
+    /* custome animation when filtering projects */
+    animation: animateProject 1.5s ease forwards;
+}
+
+@keyframes animateProject {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+.project:hover {
+    background: transparent;
+}
+
+.project_image {
+    max-height: 12rem;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.project h5 {
+    padding: 0 1.2rem;
+}
+
+.project p {
+    margin: 0.5rem 0 1.5rem;
+    padding: 0 1.2rem;
+    font-size: 0.8rem;
+}
+
+.project_cta {
+    padding: 0 1.2rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.project_cta a {
+    font-size: 1.3rem;
+    padding: 0.6rem 1rem;
+}
+
+
+/* ========== SWIPER JS (TESTIMONIALS) ========= */
+
+.swiper-wrapper {
+    margin-top: 4rem;
+    /* push pagination down */
+    padding-bottom: 4rem;
+
+}
+
+.swiper-slide {
+    background: transparent;
+    border: 0.5rem solid var(--color-gray-0);
+    cursor: default;
+    transition: var(--transition);
+}
+
+.swiper-slide:hover {
+    background: var(--color-gray-0);
+}
+
+.swiper-slide figcaption {
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 1.2rem;
+}
+
+.swiper_client {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: var(--color-gray-0);
+    padding: 1.5rem;
+}
+
+.swiper_client-avatar {
+    width: 2.5rem;
+    aspect-ratio: 1/1;
+    border-radius: 0.6rem;
+    overflow: hidden;
+}
+
+
+/* ========== FAQS ========= */
+
+.faqs_container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 5rem;
+    align-items: flex-start;
+    margin-top: 4rem;
+}
+
+.faqs_item {
+    background: var(--color-gray-100);
+    padding: 1.5rem;
+    border-left: 0.5rem solid var(--color-primary);
+    cursor: pointer;
+}
+
+.faqs_item div {
+    display: grid;
+    grid-template-columns: 3rem auto;
+    align-items: center;
+}
+
+.faqs_item i {
+    font-size: 1.5rem;
+}
+
+.faqs_item p {
+    margin-top: 0.7rem;
+    display: none;
+}
+
+/* style for js */
+p.show {
+    display: block;
+}
+
+
+/* ========== CONTACT FORM ========= */
+.contact_container {
+    width: 36%;
+}
+.contact_options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: fit-content;
+    margin-inline: auto;
+    gap: 1.2rem;
+    margin-bottom: 5rem;
+}
+
+.contact_options a {
+    background: var(--color-gray-0);
+    color: var(--color-primary);
+    padding: 1.2rem;
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.contact_options a:hover {
+    background: var(--color-primary-variant);
+    color: var(--color-gray-900);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+form input, form textarea {
+    padding: 1.2rem;
+    resize: none;
+    background: var(--color-gray-0);
+    color: var(--color-gray-900);
+}
+
+form button {
+    width: fit-content;
+    border: 0;
+    padding: 0.8rem 2rem;
+}
+
+
+/* ========== MEDIA QUERIES ========= */
+
+@media screen and (max-width: 600px) {
+    body {
+        font-size: 1rem;
+    }
+
+    .container {
+        width: var(--container-w-sm);
+    }
+
+    section > h1, section > p {
+        width: var(--container-w-sm);
+    }
+
+    nav {
+        height: 4rem;
+    }
+
+    .header_container {
+        width: 90%;
+    }
+
+    .header_container p {
+        margin-top: 0.4rem;
+    }
+
+    .header_socials {
+        display: none;
+    }
+    
+    .resume_container {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .resume_left menu {
+        gap: 0.7rem;
+    }
+
+    .resume_right.skills ul {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.2rem;
+    }
+
+    .resume_right.about ul {
+        grid-template-columns: 1fr;
+    }
+
+    .projects_categories {
+        margin-top: 2.3rem;
+    }
+
+    .projects_container {
+        gap: 1.5rem;
+    }
+
+    .swiper-wrapper {
+        margin-top: 3rem;
+    }
+
+    .faqs_container {
+        grid-template-columns: 1fr;
+    }
+
+    form button {
+        width: 100%;
+    }
+
+}
