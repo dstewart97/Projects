@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+/* ----------- ROOT VARIABLES -----------*/
+:root{
+    --color-primary: #7380ec;
+    --color-danger: #ff7782;
+    --color-success: #41f1b6;
+    --color-warning: #ffbb55;
+    --color-white: #fff;
+    --color-info-dark: #7d8da1;
+    --color-info-light: #dce1eb;
+    --color-dark: #363949;
+    --color-light: rgba(132,139,200,0.18);
+    --color-primary-variant: #111e88;
+    --color-dark-variant: #677483;
+    --color-background: #f6f6f9;
+    --color-gray-50: #edecec;
+    --color-gray-100: #e6e5e5;
+    --color-gray-200: #c0c0c0;
+    --color-gray-300: #a1a1a1;
+    --color-gray-400: #919191;
+    --color-gray-500: #7b7b7b;
+    --color-gray-600: #545454;
+    --color-gray-700: #313131;
+    --color-gray-800: #1f1f1f;
+    --color-gray-900: #0e0e0e; 
+
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+
+    --box-shadow: 0 2rem 3rem var(--color-light);
+
+    --container-w-lg: 74%;
+    --container-w-sm: 94%;
+
+    --transition: all 350ms ease;
+
+    --swiper-pagination-color: var(--color-primary);
+}
+
+
+/* ----------- DARK THEME VARIABLES -----------*/
+.dark-theme-variables {
+    --color-background: #181a1e;
+    --color-white: #202528;
+    --color-dark: #edeffd;
+    --color-dark-variant: #a3bdcc;
+    --color-light: rgba(0, 0, 0, 0.4);
+    --box-shadow: 0 2rem 3rem var(--color-light)
+}
+
+/* ----------- DARK THEME VIA COLOR INVERSION -----------*/
+.dark-theme-variables {
+    --color-gray-0: #0e0d14;
+    --color-gray-50: #211f22;
+    --color-gray-100: #252233;
+    --color-gray-200: #545454;
+    --color-gray-300: #7b7b7b;
+    --color-gray-400: #919191;
+    --color-gray-500: #a1a1a1;
+    --color-gray-600: #c0c0c0;
+    --color-gray-700: #e6e5e5;
+    --color-gray-800: #fafafa;
+    --color-gray-900: #fff; 
+}
+
+/* ----------- START WITH CLEAN PAGE & STANDARD FONT-----------*/
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    border: 0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 14px;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+}
+
+/* ----------- CHANGE SCROLLBAR COLOR-----------*/
+::-webkit-scrollbar {
+    background: rgba(11, 48, 185, 0.25);
+    width: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+}
+
+/* ----------- STYLE HEADER TAGS-----------*/
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.1;
+    color: var(--color-gray-900);
+    font-weight: 900;
+}
+h1 {
+    font-size: 1.8rem;
+}
+h2 {
+    font-size: 1.6rem;
+}
+h3 {
+    font-size: 1.4rem;
+}
+h4 {
+    font-size: 1.2rem;
+}
+h5 {
+    font-size: 1rem;
+}
+h6 {
+    font-size: 0.8rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ----------- MEDIA QUERIES-----------*/
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1200px) {
+
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width : 992px) {
+
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 768px) {
+
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width : 480px) {
+
+}
+
+/* Custom, iPhone Retina */
+@media only screen and (max-width : 320px) {
+
+}
