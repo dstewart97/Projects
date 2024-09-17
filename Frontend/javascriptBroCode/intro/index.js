@@ -366,15 +366,63 @@ document.getElementById("submitButton").onclick = function () {
 
 /* ===== array.forEach() - executes a provided callback function once for each array element ===== */
 // element, index, array are provided to us, dont need to use them
+// need at least an element 
 
-let students = ["spongebob", "patrick", "squidward"];
-students.forEach(capitalize);
-students.forEach(print);
+// let students = ["spongebob", "patrick", "squidward"];
+// students.forEach(capitalize);
+// students.forEach(print);
 
-function capitalize(element, index, array){
-    array[index] = element[0].toUpperCase() + element.substring(1);
-}
+// function capitalize(element, index, array){
+//     array[index] = element[0].toUpperCase() + element.substring(1);
+// }
 
-function print(element){
-    console.log(element);
+// function print(element){
+//     console.log(element);
+// }
+
+
+
+/* ===== array.map() executes a provided callback function once for each array element AND creates a new array ===== */
+// element, index, array are provided to us, dont need to use them
+// need at least an element 
+
+// let numbers = [1, 2, 3, 4, 5];
+// let squares = numbers.map(square);
+
+// squares.forEach(print);
+
+// function square(element){
+//     return Math.pow(element, 2);
+// }
+
+// function print(element){
+//     console.log(element);
+// }
+
+
+/* ===== array.filter() creates a new array with all elements that pass the test provided by a function ===== */
+
+// let ages = [18, 16, 21, 17, 19, 90];
+// let adults = ages.filter(checkAge);
+
+// adults.forEach(print);
+
+// function checkAge(element){
+//     return element >= 18;
+// }
+
+// function print(element){
+//     console.log(element);
+// }
+
+
+/* ===== array.reduce() reduces an array to a single value ===== */
+
+let prices = [5, 10, 15, 20, 25];
+let total = prices.reduce(checkOut);
+
+console.log(`The total is $${ total}`)
+
+function checkOut(total, element){
+    return total + element;
 }
