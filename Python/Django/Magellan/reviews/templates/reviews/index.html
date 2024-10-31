@@ -1,11 +1,12 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% if title %}
-    <title>Django Blog - {{ title }}</title>
+    <title>{{ title }}</title>
     {% else %}
     <title>Django Blog</title>
     {% endif %}
@@ -13,6 +14,34 @@
 
 
 <body>
-    <h1>Success</h1>
+    <canvas id='total_reviews_count'></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const ctx = document.getElementById('total_reviews_count');
+        const countData = JSON.parse('{{ total_review_count_data|safe }}');
+        const labels = Object.keys(countData);
+        const data = Object.values(countData);
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Reviews',
+                    data: data,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
