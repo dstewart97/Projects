@@ -10,10 +10,15 @@
     {% else %}
     <title>Django Blog</title>
     {% endif %}
+    <!-- Google Fonts: Poppins -->
+    <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="{% static 'reviews/main.css' %}">
 </head>
 
 
 <body>
+    <h1>Total Reviews by Day</h1>
     <canvas id='total_reviews_count'></canvas>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
