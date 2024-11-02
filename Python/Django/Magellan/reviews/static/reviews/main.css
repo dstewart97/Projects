@@ -4,7 +4,9 @@ body{
     font-family: poppins, sans-serif;
 }
 
-#total_reviews_count{
-    height: 100px;
-    width: 100px;
+.chart-container{
+    padding-top: 2rem;
+    width: 30vw;
+    height: 40vh;
 }
+
