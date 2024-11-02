@@ -10,13 +10,33 @@ function initializeChart(labels, data) {
             datasets: [{
                 label: 'Total Reviews',
                 data: data,
-                borderWidth: 1
+                borderColor: 'rgba(115, 128, 236, 1',
+                backgroundColor: 'rgba(115, 128, 236, 0.2',
+                borderWidth: 2,
+                fill: true
             }]
         },
         options: {
             scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
                 y: {
+                    grid: {
+                        display: false
+                    },
                     beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 11
+                        }
+                    }
                 }
             }
         }

@@ -1,62 +1,48 @@
+{% extends 'reviews/base.html' %}
+{% block content %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% if title %}
-    <title>{{ title }}</title>
-    {% else %}
-    <title>Django Blog</title>
-    {% endif %}
-    <!-- Google Fonts: Poppins -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="{% static 'reviews/main.css' %}">
-</head>
 
-<body>
-    <h1>Total Reviews by Day</h1>
-    <!-- Filter Controls -->
-    <div>
-        <label>Date:</label>
-        <input type="date" id="date">
+<h1>Reviews Dashboard: Credit Karma Credit Cards</h1>
+<!-- Filter Controls -->
+<div class = 'filters_container'>
+    <label>Date:</label>
+    <input type="date" id="date">
 
-        <label>Credit Type:</label>
-        <select id="credit_type">
-            <option value="">All</option>
-            <option value="Good">Good</option>
-            <option value="Bad">Bad</option>
-            <!-- Add more options as needed -->
-        </select>
+    <label>Credit Type:</label>
+    <select id="credit_type">
+        <option value="">All</option>
+        <option value="Good">Good</option>
+        <option value="Bad">Bad</option>
+        <!-- Add more options as needed -->
+    </select>
 
-        <label>Sentiment Category:</label>
-        <select id="sentiment_category">
-            <option value="">All</option>
-            <option value="Positive">Positive</option>
-            <option value="Negative">Negative</option>
-            <!-- Add more options as needed -->
-        </select>
+    <label>Sentiment Category:</label>
+    <select id="sentiment_category">
+        <option value="">All</option>
+        <option value="Positive">Positive</option>
+        <option value="Negative">Negative</option>
+        <!-- Add more options as needed -->
+    </select>
 
-        <label>Dominant Topic:</label>
-        <select id="dominant_topic">
-            <option value="">All</option>
-            <option value="Fees">Fees</option>
-            <option value="Customer Service">Customer Service</option>
-            <!-- Add more options as needed -->
-        </select>
+    <label>Dominant Topic:</label>
+    <select id="dominant_topic">
+        <option value="">All</option>
+        <option value="Fees">Fees</option>
+        <option value="Customer Service">Customer Service</option>
+        <!-- Add more options as needed -->
+    </select>
 
-        <button onclick="applyFilters()">Apply Filters</button>
-    </div>
-    <div class="chart-container">
-        <canvas id='total_reviews_count'></canvas>
-    </div>
-    
+    <button onclick="applyFilters()">Apply Filters</button>
+</div>
+<div class="chart-container">
+    <canvas id='total_reviews_count'></canvas>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src = "{% static 'reviews/dashboard.js' %}"></script>
-    <!-- <script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'reviews/dashboard.js' %}"></script>
+<!-- <script>
         const ctx = document.getElementById('total_reviews_count');
         const countData = JSON.parse('{{ total_review_count_data|safe }}');
         const labels = Object.keys(countData);
@@ -81,6 +67,4 @@
             }
         });
     </script> -->
-</body>
-
-</html>
+{% endblock content %}
