@@ -14,7 +14,8 @@ class Magellan:
     def run_scraper(self):
         scraper = ReviewScrapper(driver_path = r'C:\Users\dstewart\OneDrive - CreditOne Bank\Desktop\Python\msedgedriver.exe')
         product_dict = {
-            'good_credit' : ['chaseunitedbusiness']
+            'good_credit' : ['CCDiscover05'],
+            'fair_credit' : ['contfin01']
         }
         scraper.scrape_reviews(product_dict)
         raw_data = scraper.data
