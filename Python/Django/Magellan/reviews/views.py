@@ -25,7 +25,8 @@ def filter_data(request):
 
     # Convert to JSON serializable format if needed
     filtered_data['total_reviews_by_date'] = {str(k): v for k, v in filtered_data['total_reviews_by_date'].items()}
-
+    filtered_data['average_rating_by_date'] = {str(k): v for k, v in filtered_data['average_rating_by_date'].items()}
+    filtered_data['average_sentiment_by_date'] = {str(k): v for k, v in filtered_data['average_sentiment_by_date'].items()}
     return JsonResponse(filtered_data)
 
 

@@ -34,18 +34,12 @@
     --box-shadow: 0 2rem 3rem var(--color-light)
 }
 
-
 .chart-container{
-    padding-top: 2rem;
-    width: 30vw;
-    height: 40vh;
-}
-
-.filters_container{
     display: flex;
-    padding-top: 1rem;
-    justify-content: space-between;
-    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    width: 26vw;
+    padding-bottom: 1rem;
 }
 
 .filters_container input, select{
@@ -62,4 +56,30 @@
     color: white;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.filters_container{
+    display: flex;
+    padding-top: 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.middle-charts-container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    height: 90vh;
+}
+
+.chart{
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#chart1, #chart2, #chart3, #chart4{
+    height: 100%;
 }
