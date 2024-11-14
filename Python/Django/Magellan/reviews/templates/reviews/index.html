@@ -28,43 +28,26 @@
     <label>Dominant Topic:</label>
     <select id="dominant_topic">
         <option value="">All</option>
-        <option value="Fees">Fees</option>
-        <option value="Customer Service">Customer Service</option>
+        <option value="fees">Fees</option>
+        <option value="customer_service">Customer Service</option>
         <!-- Add more options as needed -->
     </select>
 
     <button onclick="applyFilters()">Apply Filters</button>
 </div>
 <div class="chart-container">
-    <canvas id='total_reviews_count'></canvas>
+    <canvas id="total_reviews_count"></canvas>
+    <canvas id="average_rating_timeline"></canvas>
+    <canvas id="average_sentiment_timeline"></canvas>
+</div> 
+<div class="middle-charts-container">
+    <div class="chart" id="chart1"><canvas id="topic_sentiment_vbar"></canvas></div>
+    <div class="chart" id="chart2"><canvas id="sentiment_topic_scatter"></canvas></div>
+    <div class="chart" id="chart3"><canvas id="topic_sentiment_vbar"></canvas></div>
+    <div class="chart" id="chart4"><canvas id="topic_sentiment_vbar"></canvas></div>
 </div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'reviews/dashboard.js' %}"></script>
-<!-- <script>
-        const ctx = document.getElementById('total_reviews_count');
-        const countData = JSON.parse('{{ total_review_count_data|safe }}');
-        const labels = Object.keys(countData);
-        const data = Object.values(countData);
-
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Total Reviews',
-                    data: data,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script> -->
 {% endblock content %}
