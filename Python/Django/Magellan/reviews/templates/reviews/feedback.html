@@ -1,0 +1,67 @@
+{% extends 'reviews/base.html' %}
+{% block content %}
+{% load static %}
+
+<h1>Credit Karma Reviews</h1>
+<!-- Filter Controls -->
+<div class='filters_container'>
+    <label>Date:</label>
+    <input type="date" id="date">
+
+    <label>Credit Type:</label>
+    <select id="credit_type">
+        <option value="">All</option>
+        <option value="Good">Good</option>
+        <option value="Bad">Bad</option>
+        <!-- Add more options as needed -->
+    </select>
+
+    <label>Sentiment Category:</label>
+    <select id="sentiment_category">
+        <option value="">All</option>
+        <option value="Positive">Positive</option>
+        <option value="Negative">Negative</option>
+        <!-- Add more options as needed -->
+    </select>
+
+    <label>Dominant Topic:</label>
+    <select id="dominant_topic">
+        <option value="">All</option>
+        <option value="fees">Fees</option>
+        <option value="customer_service">Customer Service</option>
+        <!-- Add more options as needed -->
+    </select>
+
+    <button onclick="applyFeedbackFilters()">Apply Filters</button>
+</div>
+<!-- Feedback Cards -->
+<div class="feedback-container" id="feedback-container">
+    {% for item in feedback %}
+    <div class="feedback-card">
+        <h1>{{ item.title }}</h1>
+        <p>{{ item.date }}</p><br>
+        <p><strong>Product:</strong> {{ item.product }}</p><br>
+        <p><strong>Rating:</strong> {{ item.rating_int }}</p><br>
+        <p id="sentimentText"><strong>Sentiment:</strong> {{ item.sentiment_category }}</p><br>
+        <p><strong>Topic:</strong> {{ item.dominant_topic }}</p><br>
+        <p><strong>Body:</strong> {{ item.body }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination controls -->
+<div class="pagination">
+    {% if feedback.has_previous %}
+    <a href="?page={{ feedback.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    <span>Page {{ feedback.number }} of {{ feedback.paginator.num_pages }}</span>
+
+    {% if feedback.has_next %}
+    <a href="?page={{ feedback.next_page_number }}">Next</a>
+    {% endif %}
+</div>
+
+
+<script src="{% static 'reviews/feedback.js' %}"></script>
+{% endblock content %}
