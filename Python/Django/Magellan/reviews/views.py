@@ -44,6 +44,7 @@ def feedback_page(request):
         'credit_type': credit_type,
         'sentiment_category': sentiment_category,
         'dominant_topic': dominant_topic,
+        'title' : 'Feedback'
     }
     return render(request, 'reviews/feedback.html', context)
 
@@ -57,24 +58,15 @@ def filter_feedback(request):
 
     # Retrieve filtered reviews
     reviews_queryset = get_feedback(date, credit_type, sentiment_category, dominant_topic)
-    
+
     # Pagination
     paginator = Paginator(reviews_queryset, 5)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
 
-    # Prepare JSON response with relevant fields
-    feedback_data = [
-        {
-            'product': item.product,
-            'rating_int': item.rating_int,
-            'sentiment_category': item.sentiment_category,
-            'dominant_topic': item.dominant_topic,
-            'date': item.date.strftime('%Y-%m-%d')
-        }
-        for item in page_obj
-    ]
-    return JsonResponse({'feedback_data': feedback_data})
+    # Render only the filtered feedback items
+    return render(request, 'reviews/feedback_list.html', {'feedback': page_obj})
+
 
 
 

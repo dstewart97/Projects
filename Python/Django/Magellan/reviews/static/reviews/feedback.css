@@ -23,6 +23,45 @@
     color: var(--color-primary);
 }
 
+.feedback-card p{
+    font-size: 1rem;
+}
+
+
+.star {
+    font-size: 20px;
+    color: #ddd; /* Default color for unfilled stars */
+}
+
+.star.filled {
+    color: var(--color-warning); /* Color for filled stars (e.g., gold) */
+}
+
+.thumbs-container {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 5px;
+}
+
+.thumb {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: #555;
+}
+
+.thumb-icon {
+    font-size: 1.5rem;
+    margin-right: 5px ;
+}
+
+.thumb-count {
+    font-weight: bold;
+}
+
+
+
+
 /* Hover effect */
 .feedback-card:hover {
     transform: scale(1.02);
@@ -48,6 +87,7 @@
     align-items: center;
     gap: 1rem;
     margin-top: 1.5rem;
+    padding-bottom: 2rem;
 }
 
 .pagination a {

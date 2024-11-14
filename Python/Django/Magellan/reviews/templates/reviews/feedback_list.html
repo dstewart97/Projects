@@ -1,0 +1,17 @@
+
+{% load static %}
+{% for item in feedback %}
+<div class="feedback-card">
+    <h1>{{ item.title }}</h1>
+    <p>{{ item.date }}</p><br><br>
+    <p><strong>Product:</strong> {{ item.product }}</p><br>
+    <p><strong>Rating:</strong> {{ item.rating_int }}</p><br>
+    <p id="sentimentText"><strong>Sentiment:</strong> {{ item.sentiment_category }}</p><br>
+    <p><strong>Dominant Topic: </strong> {{ item.dominant_topic }}</p><br>
+    <p><strong>Topic 2:</strong> {{ item.topic2 }}</p><br>
+    <p><strong>Topic 3:</strong> {{ item.topic3 }}</p><br>
+    <p><strong>Body:</strong> {{ item.body }}</p>
+</div>
+{% empty %}
+<p>No reviews match the selected filters.</p>
+{% endfor %}

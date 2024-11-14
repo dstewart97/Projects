@@ -39,13 +39,28 @@
     {% for item in feedback %}
     <div class="feedback-card">
         <h1>{{ item.title }}</h1>
-        <p>{{ item.date }}</p><br>
+        <p>{{ item.date }}</p>
+        <div class="rating-stars">
+            {% for i in "12345" %}
+                <span class="star {% if item.rating_int >= i|add:"0" %}filled{% endif %}">★</span>
+            {% endfor %}
+        </div><br>        
         <p><strong>Product:</strong> {{ item.product }}</p><br>
-        <p><strong>Rating:</strong> {{ item.rating_int }}</p><br>
         <p id="sentimentText"><strong>Sentiment:</strong> {{ item.sentiment_category }}</p><br>
         <p><strong>Dominant Topic: </strong> {{ item.dominant_topic }}</p><br>
         <p><strong>Topic 2:</strong> {{ item.topic2 }}</p><br>
-        <p><strong>Body:</strong> {{ item.body }}</p>
+        <p><strong>Topic 3:</strong> {{ item.topic3 }}</p><br>
+        <p><strong>Body:</strong> {{ item.body }}</p><br>
+        <div class="thumbs-container">
+            <div class="thumb">
+                <span class="thumb-icon">&#128077;</span>
+                <span class="thumb-count">{{ item.helpful }}</span>
+            </div>
+            <div class="thumb">
+                <span class="thumb-icon">&#128078;</span>
+                <span class="thumb-count">{{ item.not_helpful }}</span>
+            </div>
+        </div>
     </div>
     {% endfor %}
 </div>
