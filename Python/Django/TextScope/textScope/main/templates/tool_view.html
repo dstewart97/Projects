@@ -1,68 +1,102 @@
-<h2>Topic Categorization Tool</h2>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic Categorization Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+</head>
+<body>
+    <h2>Topic Categorization Tool</h2>
+    <div class="container">
+         <!-- Add Topic -->
+    <section>
+        <h3>Manage Topics</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ topic_form.as_p }}
+            <button type="submit" name="add_topic">Add Topic</button>
+        </form>
+    </section>
 
-<!-- Add Topic -->
-<h3>Manage Topics</h3>
-<form method="post">
-    {% csrf_token %}
-    {{ topic_form.as_p }}
-    <button type="submit" name="add_topic">Add Topic</button>
-</form>
+    <!-- Select Topics -->
+    <section>
+        <h3>Select Existing Topics</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ select_topics_form.as_p }}
+            <button type="submit" name="select_topics">Save Selected Topics</button>
+        </form>
 
-<!-- Select Topics -->
-<h3>Select Existing Topics</h3>
-<form method="post">
-    {% csrf_token %}
-    {{ select_topics_form.as_p }}
-    <button type="submit" name="select_topics">Save Selected Topics</button>
-</form>
+        <h4>Current Topics</h4>
+        <ul>
+            {% for topic in topics %}
+            <li>
+                <strong>{{ topic.key }}</strong>: {{ topic.values }}
+                (<a href="{% url 'edit_topic' topic.id %}">Edit</a>)
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
 
-<h4>Current Topics</h4>
-<ul>
-    {% for topic in topics %}
-    <li>
-        <strong>{{ topic.key }}</strong>: {{ topic.values }}
-        (<a href="{% url 'edit_topic' topic.id %}">Edit</a>)
-    </li>
-    {% endfor %}
-</ul>
+    <!-- File Upload -->
+    <section>
+        <h3>Upload File</h3>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ file_form.as_p }}
+            <button type="submit" name="upload_file">Upload</button>
+        </form>
+    </section>
 
-<!-- File Upload -->
-<h3>Upload File</h3>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ file_form.as_p }}
-    <button type="submit" name="upload_file">Upload</button>
-</form>
+    <!-- Process Data -->
+    {% if columns %}
+    <section>
+        <h3>Select Column for Analysis</h3>
+        <form method="post">
+            {% csrf_token %}
+            <select name="text_column">
+                {% for column in columns %}
+                <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" name="process_data">Process</button>
+        </form>
+    </section>
+    {% endif %}
 
-<!-- Process Data -->
-{% if columns %}
-<h3>Select Column for Analysis</h3>
-<form method="post">
-    {% csrf_token %}
-    <select name="text_column">
-        {% for column in columns %}
-        <option value="{{ column }}">{{ column }}</option>
-        {% endfor %}
-    </select>
-    <button type="submit" name="process_data">Process</button>
-</form>
-{% endif %}
+    <!-- Processed Data -->
+    {% if data %}
+    <section>
+        <h3>Processed Data</h3>
+        <table>
+            <thead>
+                <tr>
+                    {% for column in data.0 %}
+                    <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    {% for cell in row.values %}
+                    <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    {% endif %}
+    </div>
+</body>
+</html>
 
-<!-- Processed Data -->
-{% if data %}
-<h3>Processed Data</h3>
-<table border="1">
-    <tr>
-        {% for column in data.0 %}
-        <th>{{ column }}</th>
-        {% endfor %}
-    </tr>
-    {% for row in data %}
-    <tr>
-        {% for cell in row.values %}
-        <td>{{ cell }}</td>
-        {% endfor %}
-    </tr>
-    {% endfor %}
-</table>
-{% endif %}
+
+
+
+
+
