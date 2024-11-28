@@ -1,95 +1,144 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
 import pandas as pd
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from .forms import FileUploadForm, SelectTopicsForm, TopicForm
 from .models import Topic
-from .forms import TopicForm, SelectTopicsForm, FileUploadForm
+from io import StringIO
+import csv
 
+
+
+def handle_uploaded_file(file):
+    """Handles file upload and returns the data in a DataFrame."""
+    if file.name.endswith('.csv'):
+        return pd.read_csv(file)
+    elif file.name.endswith('.xlsx'):
+        return pd.read_excel(file)
+    return None
+
+
+
+def process_topics(data, selected_topics, selected_column):
+    """Process the topics by matching exact phrases in the selected column with the selected topics."""
+    # Build the topics dictionary from the selected topics, ensuring case-insensitive matching
+    topics = {topic.key.lower(): [value.lower() for value in topic.values.split(',')] for topic in selected_topics}
+    results = []
+    # Iterate through each text entry in the selected column
+    for text in data[selected_column]:
+        # Convert the text to lowercase for case-insensitive matching
+        text = text.lower()  
+        # Count the occurrences of each topic (as a full phrase) in the text
+        topic_counts = {key: sum(phrase in text for phrase in values) for key, values in topics.items()}           
+        # Filter out topics with a count of 0
+        topic_counts = {key: count for key, count in topic_counts.items() if count > 0}            
+        # If there are any matching topics, sort them by count (descending)
+        if topic_counts:
+            sorted_topics = sorted(topic_counts.items(), key=lambda x: x[1], reverse=True)          
+            # Dominant topic (most frequent)
+            dominant_topic = sorted_topics[0][0]           
+            # Subtopics (top 3 after the dominant topic)
+            additional_topics = [t[0] for t in sorted_topics[1:4]]
+        else:
+            dominant_topic = "None"
+            additional_topics = []       
+        # Store the results (only the text, dominant topic, and subtopics)
+        results.append({
+            'selected_text': text,  # Keep the original text column
+            'dominant_topic': dominant_topic,
+            'subtopics': ', '.join(additional_topics)
+        })
+    # Convert the results into a DataFrame
+    processed_data = pd.DataFrame(results)
+    return processed_data
+
+
+
+def export_data(request, file_type):
+    """Export processed data as CSV or XLSX."""
+    # Retrieve the processed data from the session
+    processed_data_json = request.session.get('processed_data')
+    # If processed data is not found, return an error
+    if not processed_data_json:
+        return HttpResponse("No processed data available for export.", status=400)
+    processed_data = pd.read_json(processed_data_json)
+    # Convert data to either CSV or XLSX based on the requested file type
+    if file_type == 'csv':
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="processed_data.csv"'
+        processed_data.to_csv(response, index=False)
+    elif file_type == 'xlsx':
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename="processed_data.xlsx"'
+        processed_data.to_excel(response, index=False)
+    else:
+        return HttpResponse("Invalid file type", status=400)
+    return response
 
 
 
 def tool_view(request):
-    topics = Topic.objects.all()
-    topic_form = TopicForm()
-    file_form = FileUploadForm()
-    select_topics_form = SelectTopicsForm()
+    """Main view for the topic categorization tool."""
+    file_uploaded = False
+    column_selected = False
     processed_data = None
-    column_options = []
+    column_choices = []
+    topics = Topic.objects.all()  # Get all topics to display in the form
+    
+    # Debugging: Check the tooltip_text for each topic
+    for topic in topics:
+        print(f"Topic: {topic.key}, Tooltip: {topic.tooltip_text}")  # This will print to the console
 
     if request.method == 'POST':
-        # Handle adding new topic
-        if 'add_topic' in request.POST:
-            topic_form = TopicForm(request.POST)
-            if topic_form.is_valid():
-                topic_form.save()
-
-        # Handle selecting and deselecting topics
-        elif 'select_topic' in request.POST:
-            select_topics_form = SelectTopicsForm(request.POST)
-            if select_topics_form.is_valid():
-                selected_topics = select_topics_form.cleaned_data['selected_topics'] #HUH
-                # Deselect all
-                Topic.objects.update(selected = False) 
-                # Mark selected topics as active
-                for topic in selected_topics:
-                    topic.selected = True
-                    topic.save()
-
-        # Hanlde file upload
-        elif 'upload_file' in request.POST:
-            file_form = FileUploadForm(request.POST, request.FILES)
-            if file_form.is_valid():
-                uploaded_file = request.FILES['file']
-                data = pd.read_csv(uploaded_file) if uploaded_file.name.endswith('.csv') else pd.read_excel(uploaded_file)
-                request.session['data'] = data.to_dict('records')
-                column_options = list(data.columns)
-
-        # Handle processing the data
-        elif 'process_data' in request.POST:
-            data = pd.DataFrame(request.session.get('data'))
-            selected_column = request.POST.get('text_column')
-            if selected_column:
-                data['cleaned_text'] = data[selected_column].str.lower().str.replace(r'[^\w\s]', '', regex=True)
-                processed_data = process_topics(data)
-                processed_data = processed_data.to_dict('records')
-
-    return render(request, 'tool_view.html', {
-    'topics': topics,
-    'topic_form': topic_form,
-    'file_form': file_form,
-    'select_topics_form': select_topics_form,
-    'data': processed_data,
-    'columns': column_options,
-})
-
-
-
-def process_topics(data):
-    # Use only selected topics for processing
-    topics = {topic.key: topic.values.split(',') for topic in Topic.objects.filter(selected=False)}
-    print(topics)
-    results = []
-    for text in data['cleaned_text']:
-        topic_counts = {key: sum(word in text.split() for word in values) for key, values in topics.items()}
-        sorted_topics = sorted(topic_counts.items(), key=lambda x: x[1], reverse=True)
-        dominant_topic = sorted_topics[0][0] if sorted_topics else "None"
-        additional_topics = [t[0] for t in sorted_topics[1:4]]
-        results.append({'dominant_topic': dominant_topic, 'subtopics': ', '.join(additional_topics)})
-
-    data['dominant_topic'] = [res['dominant_topic'] for res in results]
-    data['subtopics'] = [res['subtopics'] for res in results]
-    return data
-
-
-def edit_topic(request, topic_id):
-    topic = get_object_or_404(Topic, id=topic_id)
-
-    if request.method == 'POST':
-        form = TopicForm(request.POST, instance=topic)
-        if form.is_valid():
-            form.save()
-            return redirect('tool_view')  # Redirect back to the main page
-
+        # Handle file upload
+        upload_form = FileUploadForm(request.POST, request.FILES)
+        if 'file' in request.FILES:
+            file = request.FILES['file']
+            data = handle_uploaded_file(file)
+            if data is None:
+                return HttpResponse("Invalid file type, please upload a CSV or XLSX file.")
+            # Save uploaded data in session
+            request.session['data'] = data.to_json()  # Convert DataFrame to JSON for storage
+            # Dynamically create column choices for the file's columns
+            column_choices = [(col, col) for col in data.columns]
+            # Create SelectTopicsForm to let the user select topics for categorization
+            select_form = SelectTopicsForm(request.POST)
+            return render(request, 'tool_view.html', {
+                'file_uploaded': True, 
+                'select_form': select_form,
+                'column_choices': column_choices,
+                'topics': topics  # Pass topics to the template
+            })
+        # Handle column selection and process data
+        if 'selected_column' in request.POST and 'selected_topics' in request.POST:
+            data_json = request.session.get('data')
+            data = pd.read_json(data_json)
+            selected_column = request.POST.get('selected_column')
+            selected_topics_ids = request.POST.getlist('selected_topics')
+            # Retrieve selected topics from the database
+            selected_topics = Topic.objects.filter(id__in=selected_topics_ids)
+            # Process the data with the selected topics
+            processed_data = process_topics(data, selected_topics, selected_column)
+            # Save the processed data in session
+            request.session['processed_data'] = processed_data.to_json()  # Save processed data in session
+            # Convert processed_data to a list of dictionaries (for dynamic table rendering)
+            processed_data_dict = processed_data.head(10).to_dict(orient='records')  # Limit to first 10 rows
+            return render(request, 'tool_view.html', {
+                'file_uploaded': True, 
+                'column_selected': True, 
+                'processed_data': processed_data_dict,
+                'topics': topics  # Pass topics to the template
+            })
+        # Handle reset (start over)
+        if 'reset' in request.POST:
+            # Clear session data to reset the tool
+            request.session.flush()  # This will clear all session data
+            return redirect('tool_view')  # Redirect to the same view to start fresh
     else:
-        form = TopicForm(instance=topic)
-
-    return render(request, 'edit_topic.html', {'form': form, 'topic': topic})
+        upload_form = FileUploadForm()
+    # Initial render with empty forms
+    return render(request, 'tool_view.html', {
+        'upload_form': upload_form, 
+        'file_uploaded': False, 
+        'column_selected': False,
+        'topics': topics  # Pass topics for initial page load
+    })

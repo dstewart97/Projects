@@ -1,102 +1,126 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Topic Categorization Tool</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'main.css' %}">
 </head>
+
 <body>
-    <h2>Topic Categorization Tool</h2>
-    <div class="container">
-         <!-- Add Topic -->
-    <section>
-        <h3>Manage Topics</h3>
-        <form method="post">
-            {% csrf_token %}
-            {{ topic_form.as_p }}
-            <button type="submit" name="add_topic">Add Topic</button>
-        </form>
-    </section>
+    <h1>Topic Categorization Tool</h1>
 
-    <!-- Select Topics -->
-    <section>
-        <h3>Select Existing Topics</h3>
-        <form method="post">
-            {% csrf_token %}
-            {{ select_topics_form.as_p }}
-            <button type="submit" name="select_topics">Save Selected Topics</button>
-        </form>
+    <!-- File Upload Form -->
+    {% if not file_uploaded %}
+    <h2>Step 1: Upload a CSV or XLSX File</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <div id="file-upload-div">
+            <h3>*Data uploaded will only persist in this session; no data is stored</h3>
+            <h3>*XLS files are not accepted</h3>
+            <h3>*Files exceeding 1,000MB are not accepted</h3>
+        </div>
+        {% csrf_token %}
 
-        <h4>Current Topics</h4>
-        <ul>
-            {% for topic in topics %}
-            <li>
-                <strong>{{ topic.key }}</strong>: {{ topic.values }}
-                (<a href="{% url 'edit_topic' topic.id %}">Edit</a>)
-            </li>
-            {% endfor %}
-        </ul>
-    </section>
+        <!-- Custom file upload button -->
+        <label for="file-input" class="custom-file-upload">Choose File</label>
+        <input type="file" name="file" id="file-input" style="display:none;" onchange="updateFileName()">
 
-    <!-- File Upload -->
-    <section>
-        <h3>Upload File</h3>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ file_form.as_p }}
-            <button type="submit" name="upload_file">Upload</button>
-        </form>
-    </section>
+        <!-- Display selected file name -->
+        <span id="file-name">No file selected</span>
 
-    <!-- Process Data -->
-    {% if columns %}
-    <section>
-        <h3>Select Column for Analysis</h3>
-        <form method="post">
-            {% csrf_token %}
-            <select name="text_column">
-                {% for column in columns %}
-                <option value="{{ column }}">{{ column }}</option>
-                {% endfor %}
-            </select>
-            <button type="submit" name="process_data">Process</button>
-        </form>
-    </section>
+        <button type="submit">Upload File</button>
+    </form>
     {% endif %}
 
-    <!-- Processed Data -->
-    {% if data %}
-    <section>
-        <h3>Processed Data</h3>
+    {% if file_uploaded %}
+    <!-- Step 2: Select Column for Text Analysis -->
+    <h2>Step 2: Select Input Column and Topics for Text Analysis</h2>
+    <form method="POST">
+        <div id="file-upload-div">
+            <h3>*The 'Select Text Column' field is a dropdown all of the columns in your uploaded dataset</h3>
+            <h3>*The 'Select Topic for Categorization' field offers pre-built topics to perform text analysis</h3>
+            <h3 style="color:#cc3300;">*You must select a text column; integer or float columns will not be accepted
+            </h3>
+        </div>
+        {% csrf_token %}
+        <label for="selected_column"><strong>Select Text Column:</strong></label>
+        <select name="selected_column" required>
+            {% for col, label in column_choices %}
+            <option value="{{ col }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <!-- Select Topics for Categorization Form -->
+        <h3>Select Topics for Categorization</h3>
+        <div>
+            {% for topic in topics %}
+                <div class="checkbox-group">
+                    <input type="checkbox" id="topic_{{ topic.id }}" name="selected_topics" value="{{ topic.id }}">
+                    <label for="topic_{{ topic.id }}">
+                        {{ topic.key }}
+                        <!-- Tooltip with topic values -->
+                        <span class="tooltip-icon" data-tooltip="{{ topic.tooltip_text }}">?</span>
+                    </label>
+                </div>
+            {% endfor %}
+            <div class="manage-container">
+                <p>Add Topic</p>
+                <p>Edit Topic</p>
+                <p>&#x1F6A7;</p>
+            </div>
+        </div>
+
+
+        <button type="submit">Process Data</button>
+    </form>
+    {% endif %}
+
+    <!-- Processed Data Table -->
+    {% if column_selected %}
+    <div class="table-container">
+        <h2>Processed Data &#x1F680;</h2>
+        <p>The below table is a sample of the first 10 rows</p>
         <table>
             <thead>
                 <tr>
-                    {% for column in data.0 %}
-                    <th>{{ column }}</th>
-                    {% endfor %}
+                    <th>Selected Text</th>
+                    <th>Dominant Topic</th>
+                    <th>Subtopics</th>
                 </tr>
             </thead>
             <tbody>
-                {% for row in data %}
+                {% for row in processed_data %}
                 <tr>
-                    {% for cell in row.values %}
-                    <td>{{ cell }}</td>
-                    {% endfor %}
+                    <td>{{ row.selected_text }}</td>
+                    <td>{{ row.dominant_topic }}</td>
+                    <td>{{ row.subtopics }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-    </section>
-    {% endif %}
     </div>
+    <div class="export-container">
+        <div class="export-btn-container">
+            <a href="{% url 'export_data' 'csv' %}">Export as CSV</a> |
+            <a href="{% url 'export_data' 'xlsx' %}">Export as XLSX</a>
+        </div>
+    </div>
+
+    <!-- Reset / Start Over Button -->
+    <div class="reset-container">
+        <form class="reset-form" method="POST">
+            {% csrf_token %}
+            <button type="submit" name="reset" value="true">Start Over</button>
+        </form>
+    </div>
+
+    {% endif %}
+
+    <script src="{% static 'main.js' %}"></script>
 </body>
+
+
 </html>
-
-
-
-
-
-

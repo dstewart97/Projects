@@ -9,15 +9,24 @@ class TopicForm(forms.ModelForm):
         model = Topic
         fields = ['key', 'values']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Dynamically load topics for selection
+        self.fields['key'].queryset = Topic.objects.all().values_list('key', flat=True)
+        self.fields['values'].queryset = Topic.objects.all().values_list('values', flat=True)
+
+
 
 # Dynamically displays all topics and lets users toggle which ones to include during processing.
 class SelectTopicsForm(forms.Form):
+    # Dynamically load all topics from the Topic model
     selected_topics = forms.ModelMultipleChoiceField(
-        queryset = Topic.objects.all(),
-        widget = forms.CheckboxSelectMultiple,
-        required = False,
-        label = "Select Topics for Analysis"
+        queryset=Topic.objects.all(),  # Get topics from the model
+        widget=forms.CheckboxSelectMultiple,  # Allow multiple selection
+        required=False,
+        label=False
     )
+
 
 
 # Accepts .csv or .xlsx files for processing.
