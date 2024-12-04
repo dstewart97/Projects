@@ -11,24 +11,20 @@ function updateFileName() {
 
 // Show and Hide Add and Edit TOpic Modals
 document.addEventListener("DOMContentLoaded", () => {
-    const addTopicBtn = document.getElementById("add-topic-btn");
-    const editTopicBtn = document.getElementById("edit-topic-btn");
-    const addTopicModal = document.getElementById("add-topic-modal");
-    // const editTopicModal = document.getElementById("edit-topic-modal");
-    const closeAddTopic = document.getElementById("close-add-topic");
-    const closeEditTopic = document.getElementById("close-edit-topic");
+    const addTopicBtn = document.getElementById("openModalBtn");
+    const addTopicModal = document.getElementById("addTopicModal");
+    const closeAddTopic = document.getElementsByClassName("close")[0];
+
+    console.log(closeAddTopic)
 
     // Open Modals
     addTopicBtn.addEventListener("click", () => addTopicModal.style.display = "block");
-    // editTopicBtn.addEventListener("click", () => editTopicModal.style.display = "block");
 
     // Close Modals
     closeAddTopic.addEventListener("click", () => addTopicModal.style.display = "none");
-    // closeEditTopic.addEventListener("click", () => editTopicModal.style.display = "none");
 
     window.addEventListener("click", (event) => {
         if (event.target === addTopicModal) addTopicModal.style.display = "none";
-        // if (event.target === editTopicModal) editTopicModal.style.display = "none";
     });
 });
 
