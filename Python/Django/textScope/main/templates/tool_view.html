@@ -27,7 +27,14 @@
 
     <!-- Main Content -->
     <main class="content">
-        <h1>Topic Categorization Tool</h1>
+        <div class="instructions-container">
+            <p><span>Welcome to textScope &#x1F918;!</span><br><br>
+                This tool uses a keyword-based algorithm to scan your text for predefined or custom topics. It assigns a
+                <strong>Dominant Topic</strong> based on frequency and highlights additional <strong>Subtopics</strong>
+                for deeper insights. Whether you're analyzing customer feedback, survey responses, or any text-heavy
+                dataset, this tool helps you categorize and understand your data efficiently.
+            </p>
+        </div>
         <!-- File Upload Form -->
         <h2>Step 1: Upload a CSV or XLSX File</h2>
         <form id="upload-form" method="POST" enctype="multipart/form-data">
@@ -61,7 +68,7 @@
         </form>
 
         <!-- Step 2: Select Column for Text Analysis -->
-        <h2>Step 2: Select Input Column and Topics for Text Analysis</h2>
+        <h2>Step 2: Select Text Column and Topics for Text Analysis</h2>
         <form method="POST">
             {% csrf_token %}
             <label for="selected_column"><strong>Select Text Column:</strong></label>
@@ -72,7 +79,9 @@
             </select>
             <h3 style="font-size: 1rem;">Select Topics for Categorization</h3>
             <div>
-                {% for topic in topics %}
+                <!-- Permanenet Topics from Database -->
+                <h4>Available Topics:</h4>
+                {% for topic in permanent_topics %}
                 <div class="checkbox-group">
                     <input type="checkbox" id="topic_{{ topic.id }}" name="selected_topics" value="{{ topic.id }}">
                     <label for="topic_{{ topic.id }}">
@@ -81,41 +90,40 @@
                     </label>
                 </div>
                 {% endfor %}
-                <div class="manage-container">
-                    <a href="#" id="add-topic-btn">Add Topic</a>
-                    <!-- <a href="#" id="edit-topic-btn">Edit Topics</a> Hidden for now will try again later -->
+                <!-- Session Based Topics -->
+                {% if session_topics %}
+                <h4>Temporary Topics:</h4>
+                {% for topic in session_topics %}
+                <div class="checkbox-group">
+                    <input type="checkbox" id="session_topic_{{ forloop.counter }}" name="selected_topics"
+                        value="session_{{ forloop.counter }}">
+                    <label for="session_topic_{{ forloop.counter }}">
+                        {{ topic.key }}
+                        <span class="tooltip-icon" data-tooltip="{{ session_topic_.tooltip_text }}">?</span>
+                    </label>
                 </div>
+                {% endfor %}
+                {% endif %}
             </div>
+            <button id="openModalBtn" class="btn">Add Temporary Topic</button>
             <button type="submit" id="process-data-btn" name="process_data">Process Data</button>
         </form>
-
-        <!-- Add Topic Form -->
-        <div id="add-topic-modal" class="modal">
+        <!-- Add Temporary Topic Form -->
+         <div id="addTopicModal" class="modal">
             <div class="modal-content">
-                <span class="close" id="close-add-topic">&times;</span>
-                <h2>Add Topic</h2>
-                <form method="POST">
-                    {% csrf_token %}
-                    {{ add_topic_form.as_p }}
-                    <button type="submit" name="add-topic-form">Save Topic</button>
-                </form>
+                <span class="close">&times;</span>
+            <h4>Add Temporary Topic</h4>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" name="session_topic_name" placeholder="Topic Name" required>
+                <textarea name="session_topic_keywords" placeholder="Keywords (comma-seperated)"
+                    required></textarea>
+                <button type="submit" name="add_session_topic">Add Topic</button>
+            </form>
             </div>
-        </div>
+         </div>
 
-        <!-- Edit Topic Form -->
-        <div id="edit-topic-modal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="close-edit-topic">&times;</span>
-                <h2>Edit Topics</h2>
-                <form method="POST">
-                    {% csrf_token %}
-                    {% for form in edit_topic_forms %}
-                    {{ form.as_p }}
-                    {% endfor %}
-                    <button type="submit" name="edit-topic-form">Save Changes</button>
-                </form>
-            </div>
-        </div>
+
         <div class="loader-container">
             <div class="loader">
                 <div class="inner one"></div>

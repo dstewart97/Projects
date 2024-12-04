@@ -11,6 +11,18 @@ body, html {
 
 }
 
+/* Instructions */
+.instructions-container {
+    max-width: 850px;
+    margin: 0 auto;
+    padding-bottom: 0.5rem;
+}
+
+.instructions-container span {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
 /* Buttons */
 form button {
     background: #2e59d9; /* Blue or purple accent */
@@ -297,7 +309,6 @@ form select {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6); /* Slightly darker for contrast */
     z-index: 99999;
-    overflow: auto; /* Prevents scrolling */
     animation: fadeIn 0.3s ease-out; /* Smooth fade-in effect */
 }
 
@@ -323,14 +334,29 @@ form select {
     font-weight: bold;
     cursor: pointer;
     color: #333;
-    transition: color 0.2s ease-in-out;
 }
 
 .close:hover {
     color: #cc3300; /* Red on hover */
 }
 
+#openModalBtn {
+    background: transparent;
+    padding: 0;
+    color: #717378;
+    text-align: left;
+    margin-left: 8px;
+    margin-top: 8px;
+    font-size: 0.95rem;
+}
 
+#openModalBtn:hover {
+    border: none;
+    cursor: pointer;
+    color: #2e59d9;
+    text-decoration: underline;
+    transition: all 0.1s ease;
+}
 
 /* Keyframes for animation */
 @keyframes fadeIn {

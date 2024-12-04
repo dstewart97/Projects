@@ -9,8 +9,6 @@ import time
 import csv
 
 
-
-
 def handle_uploaded_file(file):
     """Handles file upload and returns the data in a DataFrame."""
     if file.name.endswith('.csv'):
@@ -24,18 +22,32 @@ def handle_uploaded_file(file):
 def process_topics(data, selected_topics, selected_column):
     """Process the topics by matching exact phrases in the selected column with the selected topics."""
     # Build the topics dictionary from the selected topics, ensuring case-insensitive matching
-    topics = {topic.key.lower(): [value.lower() for value in topic.values.split(',')] for topic in selected_topics}
+    # topics = {topic.key.lower(): [value.lower() for value in topic.values.split(',')] for topic in selected_topics}
+    topics = {}
+    for topic in selected_topics:
+        if isinstance(topic, dict):
+            key = topic['key'].lower()
+            values = [value.strip() for value in topic['values'].split(',')]
+        else:
+            key = topic.key.lower()
+            values = [value.strip().lower() for value in topic.values.split(',')]
+        topics[key] = values
     results = []
+
     # Fill Null with blank before processing 
     data[selected_column] = data[selected_column].fillna('')
+
     # Iterate through each text entry in the selected column
     for text in data[selected_column]:
         # Convert the text to lowercase for case-insensitive matching
         text = text.lower()  
+
         # Count the occurrences of each topic (as a full phrase) in the text
-        topic_counts = {key: sum(phrase in text for phrase in values) for key, values in topics.items()}          
+        topic_counts = {key: sum(phrase in text for phrase in values) for key, values in topics.items()}   
+
         # Filter out topics with a count of 0
-        topic_counts = {key: count for key, count in topic_counts.items() if count > 0}            
+        topic_counts = {key: count for key, count in topic_counts.items() if count > 0}      
+
         # If there are any matching topics, sort them by count (descending)
         if topic_counts:
             sorted_topics = sorted(topic_counts.items(), key=lambda x: x[1], reverse=True)          
@@ -52,6 +64,7 @@ def process_topics(data, selected_topics, selected_column):
             'dominant_topic': dominant_topic,
             'subtopics': ', '.join(additional_topics)
         })
+
     # Convert the results into a DataFrame
     processed_data = pd.DataFrame(results)
     return processed_data
@@ -86,47 +99,61 @@ def tool_view(request):
     column_selected = False
     processed_data = None
     topics = Topic.objects.all()
-    add_topic_form = TopicForm()
-    edit_topic_forms = [TopicForm(instance=topic) for topic in topics]
+
+    # Load permanent topics from the database
+    permanent_topics = Topic.objects.all()
+    # Load session-based topics or initialize if not present
+    session_topics = request.session.get('session_topics', [])
 
     if request.method == 'POST':
-        # Handle Add Topic Form
-        if 'add-topic-form' in request.POST:
-            add_topic_form = TopicForm(request.POST)
-            if add_topic_form.is_valid():
-                add_topic_form.save()
-                return redirect('tool_view')
-            else:
-                return render(request, 'tool_view.html', {
-                    'file_uploaded': file_uploaded,
-                    'column_selected': column_selected,
-                    'topics': topics,
-                    'add_topic_form': add_topic_form,  # Return with errors if any
-                    'edit_topic_forms': edit_topic_forms,
-                })
-            
-        # Handle Edit Topic Form
-        elif 'edit-topic-form' in request.POST:
-            for topic in topics:
-                print(topic)
-                form = TopicForm(request.POST, instance=topic)
-                print(form)
-                if form.is_valid():
-                    print(form)
-                    form.save()
-            return redirect('tool_view')
-        
+        # Handle Add Temporary Topic
+        if 'add_session_topic' in request.POST:
+            new_topic = {
+                'id': f"session_{len(session_topics) + 1}",
+                'key' : request.POST['session_topic_name'],
+                'values' : request.POST['session_topic_keywords']
+            }
+            session_topics.append(new_topic)
+            request.session['session_topics'] = session_topics
+            return redirect('tool_view') # Avoid reloading form
+
         # Handle Process Data Form
         elif 'process_data' in request.POST:
             data_json = request.session.get('data')
             if not data_json:
                 return HttpResponse("Session expired or data missing. Please upload a file again.", status=400)
+            
             data = pd.read_json(data_json)
             selected_column = request.POST.get('selected_column')
             selected_topics_ids = request.POST.getlist('selected_topics')
+
             if not selected_column or not selected_topics_ids:
                 return HttpResponse("Please select a column and at least one topic for categorization.", status=400)
-            selected_topics = Topic.objects.filter(id__in=selected_topics_ids)
+            
+            # Seperate session and permanenet topics
+            permanent_topic_ids = []
+            session_topic_keys = []
+            
+            for topic_id in selected_topics_ids:
+                if topic_id.startswith("session_"):
+                    session_topic_keys.append(topic_id.split("_", 1)[1])
+                else:
+                    permanent_topic_ids.append(int(topic_id))
+
+            # Fetch permanent topics and session topics 
+            permanent_topics = Topic.objects.filter(id__in=permanent_topic_ids)
+            session_topics_dict = {str(topic['id']): topic for topic in session_topics}
+
+            # Convert session topics into object-like structures
+            session_topic_objects = [
+                type('TempTopic', (object), {'key': topic['key'], 'values': topic['values']})
+                for key, topic in session_topics_dict.items() if key in session_topic_keys
+            ]
+
+            #combine permanenet and session topics
+            selected_topics = list(permanent_topics) + session_topic_objects
+            
+            # Process data with combined topics
             processed_data = process_topics(data, selected_topics, selected_column)
             request.session['processed_data'] = processed_data.to_json()
             time.sleep(5)
@@ -135,10 +162,10 @@ def tool_view(request):
                 'file_uploaded': True,
                 'column_selected': True,
                 'processed_data': processed_data_dict,
-                'topics': topics,
-                'add_topic_form': add_topic_form,
-                'edit_topic_forms': edit_topic_forms,
+                'permanent_topics' : permanent_topics,
+                'session_topics' : session_topics
             })
+        
         # Handle File Upload
         upload_form = FileUploadForm(request.POST, request.FILES)
         if 'file' in request.FILES:
@@ -153,7 +180,7 @@ def tool_view(request):
                 data = handle_uploaded_file(file)
                 messages.success(request, "File uploaded successfully...")
                 if data is None:
-                    return HttpResponse("Invalid file type, please upload a CSV or XLSX file.")
+                    messages.error(request, "Invalid file type...only CSV and XLSX will be processed") # MAYBE CHANGE????
                 request.session['data'] = data.to_json()
                 column_choices = [(col, col) for col in data.columns]
                 select_form = SelectTopicsForm(request.POST)
@@ -162,20 +189,23 @@ def tool_view(request):
                     'select_form': select_form,
                     'column_choices': column_choices,
                     'topics': topics,
-                    'add_topic_form': add_topic_form,
-                    'edit_topic_forms': edit_topic_forms,
+                    'permanent_topics' : permanent_topics,
+                    'session_topics' : session_topics
                 })
+            
         # Handle Reset
         elif 'reset' in request.POST:
             request.session.flush()
             return redirect('tool_view')
     else:
         upload_form = FileUploadForm()
+
+    combined_topics = list(permanent_topics) + session_topics
     return render(request, 'tool_view.html', {
         'upload_form': upload_form,
         'file_uploaded': False,
         'column_selected': False,
-        'topics': topics,
-        'add_topic_form': add_topic_form,
-        'edit_topic_forms': edit_topic_forms,
+        'topics': combined_topics,
+        'permanent_topics' : permanent_topics,
+        'session_topics' : session_topics
     })
