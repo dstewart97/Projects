@@ -68,19 +68,22 @@
         </form>
 
         <!-- Step 2: Select Column for Text Analysis -->
-        <h2>Step 2: Select Text Column and Topics for Text Analysis</h2>
+        <h2 style="margin-bottom: 0;">Step 2: Select Text Column and Topics for Text Analysis</h2>
+        <div class="temp-topic-container">
+            <button id="openModalBtn" class="temp-topic-btn">⭐ Add Temporary Topic</button>
+        </div>
         <form method="POST">
             {% csrf_token %}
-            <label for="selected_column"><strong>Select Text Column:</strong></label>
+            <label for="selected_column"><strong>Select Text Column to Analyze:</strong></label>
             <select name="selected_column" required>
                 {% for col, label in column_choices %}
                 <option value="{{ col }}">{{ label }}</option>
                 {% endfor %}
             </select>
-            <h3 style="font-size: 1rem;">Select Topics for Categorization</h3>
+            <h3 style="font-size: 1.2rem; text-align: center; text-decoration: underline; color: #2e59d9;">Select Topics to use for Categorization</h3>
             <div>
                 <!-- Permanenet Topics from Database -->
-                <h4>Available Topics:</h4>
+                <h4 style="margin-bottom: 5px; text-decoration: underline; font-weight: 700;">Built-In Topics:</h4>
                 {% for topic in permanent_topics %}
                 <div class="checkbox-group">
                     <input type="checkbox" id="topic_{{ topic.id }}" name="selected_topics" value="{{ topic.id }}">
@@ -90,11 +93,11 @@
                     </label>
                 </div>
                 {% endfor %}
-                <!-- Session Based Topics -->
+                <!-- Session Based Topics
                 {% if session_topics %}
                 <h4>Temporary Topics:</h4>
                 {% for topic in session_topics %}
-                <div class="checkbox-group">
+                <div id="session-topics" class="checkbox-group">
                     <input type="checkbox" id="session_topic_{{ forloop.counter }}" name="selected_topics"
                         value="session_{{ forloop.counter }}">
                     <label for="session_topic_{{ forloop.counter }}">
@@ -103,26 +106,24 @@
                     </label>
                 </div>
                 {% endfor %}
-                {% endif %}
+                {% endif %} -->
             </div>
-            <button id="openModalBtn" class="btn">Add Temporary Topic</button>
             <button type="submit" id="process-data-btn" name="process_data">Process Data</button>
         </form>
         <!-- Add Temporary Topic Form -->
-         <div id="addTopicModal" class="modal">
+        <div id="addTopicModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-            <h4>Add Temporary Topic</h4>
-            <form method="POST">
-                {% csrf_token %}
-                <input type="text" name="session_topic_name" placeholder="Topic Name" required>
-                <textarea name="session_topic_keywords" placeholder="Keywords (comma-seperated)"
-                    required></textarea>
-                <button type="submit" name="add_session_topic">Add Topic</button>
-            </form>
+                <h4>Add Temporary Topic</h4>
+                <form id="add-topic-form" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="session_topic_name" placeholder="Topic Name" required>
+                    <textarea name="session_topic_keywords" placeholder="Keywords (comma-seperated)"
+                        required></textarea>
+                    <button type="submit">Add Topic</button>
+                </form>
             </div>
-         </div>
-
+        </div>
 
         <div class="loader-container">
             <div class="loader">

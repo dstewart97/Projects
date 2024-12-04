@@ -15,7 +15,6 @@ body, html {
 .instructions-container {
     max-width: 850px;
     margin: 0 auto;
-    padding-bottom: 0.5rem;
 }
 
 .instructions-container span {
@@ -143,6 +142,7 @@ form button:hover {
 h1, h2{
     text-align: center;
     color: #333;
+    margin: 10px;
 }
 
 form {
@@ -285,17 +285,30 @@ form select {
     opacity: 1;
 }
 
-/* Manage Topics */
-.manage-container {
+/* Add Temp Topic */
+.temp-topic-container {
     display: flex;
-    gap: 0.5rem;
-    font-size: 0.75rem;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    margin-bottom: 10px;
+}
+
+#openModalBtn {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: #717378;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+#openModalBtn:hover {
+    border: none;
     cursor: pointer;
     color: #2e59d9;
-    font-weight: 600;
-    align-items: center;
-    margin-top: 1rem;
-
+    font-weight: 700;
+    transition: all 0.2s ease;
 }
 
 /* Manage Topics Pop-Up Modals */
@@ -340,23 +353,6 @@ form select {
     color: #cc3300; /* Red on hover */
 }
 
-#openModalBtn {
-    background: transparent;
-    padding: 0;
-    color: #717378;
-    text-align: left;
-    margin-left: 8px;
-    margin-top: 8px;
-    font-size: 0.95rem;
-}
-
-#openModalBtn:hover {
-    border: none;
-    cursor: pointer;
-    color: #2e59d9;
-    text-decoration: underline;
-    transition: all 0.1s ease;
-}
 
 /* Keyframes for animation */
 @keyframes fadeIn {
@@ -539,6 +535,11 @@ a:hover {
     font-size: 0.75rem;
 }
 
+
+.reset-container {
+    margin-top: 0;
+    padding-top: 0;
+}
 
 .reset-container form {
     background: transparent;

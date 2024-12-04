@@ -1,13 +1,18 @@
 import pandas as pd
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from .forms import FileUploadForm, SelectTopicsForm, TopicForm
 from .models import Topic
 from io import StringIO
 import time
 import csv
+import json
 
+
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 def handle_uploaded_file(file):
     """Handles file upload and returns the data in a DataFrame."""
@@ -20,14 +25,15 @@ def handle_uploaded_file(file):
 
 
 def process_topics(data, selected_topics, selected_column):
+    logging.debug(f"Selected Topics: {selected_topics}")
     """Process the topics by matching exact phrases in the selected column with the selected topics."""
     # Build the topics dictionary from the selected topics, ensuring case-insensitive matching
     # topics = {topic.key.lower(): [value.lower() for value in topic.values.split(',')] for topic in selected_topics}
     topics = {}
     for topic in selected_topics:
         if isinstance(topic, dict):
-            key = topic['key'].lower()
-            values = [value.strip() for value in topic['values'].split(',')]
+            key = topic.get('key', ''.lower())
+            values = [value.strip().lower() for value in topic.get('values', '').split(',')]
         else:
             key = topic.key.lower()
             values = [value.strip().lower() for value in topic.values.split(',')]
@@ -100,25 +106,12 @@ def tool_view(request):
     processed_data = None
     topics = Topic.objects.all()
 
-    # Load permanent topics from the database
     permanent_topics = Topic.objects.all()
-    # Load session-based topics or initialize if not present
     session_topics = request.session.get('session_topics', [])
 
     if request.method == 'POST':
-        # Handle Add Temporary Topic
-        if 'add_session_topic' in request.POST:
-            new_topic = {
-                'id': f"session_{len(session_topics) + 1}",
-                'key' : request.POST['session_topic_name'],
-                'values' : request.POST['session_topic_keywords']
-            }
-            session_topics.append(new_topic)
-            request.session['session_topics'] = session_topics
-            return redirect('tool_view') # Avoid reloading form
-
         # Handle Process Data Form
-        elif 'process_data' in request.POST:
+        if 'process_data' in request.POST:
             data_json = request.session.get('data')
             if not data_json:
                 return HttpResponse("Session expired or data missing. Please upload a file again.", status=400)
@@ -130,7 +123,6 @@ def tool_view(request):
             if not selected_column or not selected_topics_ids:
                 return HttpResponse("Please select a column and at least one topic for categorization.", status=400)
             
-            # Seperate session and permanenet topics
             permanent_topic_ids = []
             session_topic_keys = []
             
@@ -140,20 +132,12 @@ def tool_view(request):
                 else:
                     permanent_topic_ids.append(int(topic_id))
 
-            # Fetch permanent topics and session topics 
             permanent_topics = Topic.objects.filter(id__in=permanent_topic_ids)
+
             session_topics_dict = {str(topic['id']): topic for topic in session_topics}
 
-            # Convert session topics into object-like structures
-            session_topic_objects = [
-                type('TempTopic', (object), {'key': topic['key'], 'values': topic['values']})
-                for key, topic in session_topics_dict.items() if key in session_topic_keys
-            ]
-
-            #combine permanenet and session topics
-            selected_topics = list(permanent_topics) + session_topic_objects
+            selected_topics = list(permanent_topics) + list(session_topics_dict.values())
             
-            # Process data with combined topics
             processed_data = process_topics(data, selected_topics, selected_column)
             request.session['processed_data'] = processed_data.to_json()
             time.sleep(5)
@@ -162,8 +146,8 @@ def tool_view(request):
                 'file_uploaded': True,
                 'column_selected': True,
                 'processed_data': processed_data_dict,
-                'permanent_topics' : permanent_topics,
-                'session_topics' : session_topics
+                'permanent_topics': permanent_topics,
+                'session_topics': session_topics
             })
         
         # Handle File Upload
@@ -180,17 +164,19 @@ def tool_view(request):
                 data = handle_uploaded_file(file)
                 messages.success(request, "File uploaded successfully...")
                 if data is None:
-                    messages.error(request, "Invalid file type...only CSV and XLSX will be processed") # MAYBE CHANGE????
+                    messages.error(request, "Invalid file type...only CSV and XLSX will be processed") 
                 request.session['data'] = data.to_json()
-                column_choices = [(col, col) for col in data.columns]
+                # Filter columns to include only text columns
+                text_columns = [col for col in data.columns if data[col].dtype == "object"]
+                column_choices = [(col, col) for col in text_columns]
                 select_form = SelectTopicsForm(request.POST)
                 return render(request, 'tool_view.html', {
                     'file_uploaded': True,
                     'select_form': select_form,
                     'column_choices': column_choices,
                     'topics': topics,
-                    'permanent_topics' : permanent_topics,
-                    'session_topics' : session_topics
+                    'permanent_topics': permanent_topics,
+                    'session_topics': session_topics
                 })
             
         # Handle Reset
@@ -206,6 +192,39 @@ def tool_view(request):
         'file_uploaded': False,
         'column_selected': False,
         'topics': combined_topics,
-        'permanent_topics' : permanent_topics,
-        'session_topics' : session_topics
+        'permanent_topics': permanent_topics,
+        'session_topics': session_topics
     })
+
+
+
+def add_temp_topic(request):
+    print(f"Received {request.method} request")
+    if request.method == 'POST':
+        try:
+            topic_name = request.POST.get('session_topic_name')
+            topic_keywords = request.POST.get('session_topic_keywords')
+
+            # Check if necessary fields are provided
+            if not topic_name or not topic_keywords:
+                return JsonResponse({'success': False, 'message': 'Missing topic name or keywords'})
+
+            # Create a temporary topic (for session storage)
+            new_topic = {
+                'id': f"session_{len(request.session.get('session_topics', [])) + 1}",
+                'key': topic_name,
+                'values': topic_keywords
+            }
+            # Save it to session
+            session_topics = request.session.get('session_topics', [])
+            session_topics.append(new_topic)
+            request.session['session_topics'] = session_topics
+
+            # Return the newly created topic as JSON response
+            return JsonResponse({'success': True, 'topic': new_topic})
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+
+    else:
+        return JsonResponse({'success': False, 'message': 'Invalid request method'})

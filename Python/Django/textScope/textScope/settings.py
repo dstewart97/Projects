@@ -125,4 +125,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Timeout setting for Session Cookies
-SESSION_COOKIE_AGE = 3600
+SESSION_COOKIE_AGE = 60
