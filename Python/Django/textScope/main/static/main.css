@@ -11,6 +11,11 @@ body, html {
 
 }
 
+.content h1 {
+    font-size: 1.5rem;
+    padding-bottom: 1rem;
+}
+
 /* Instructions */
 .instructions-container {
     max-width: 850px;
@@ -246,14 +251,28 @@ form select {
     height: 25px;
 }
 
+.checkbox-scroll-container {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.checkbox-group {
+    margin-bottom: 5px;
+}
+
+#topicSearch {
+    width: 95%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #717378;
+    border-radius: 5px;
+}
 
 /* Styling for Tooltip*/
 .tooltip-icon {
     display: inline-block;
     margin-left: 5px;
-    background-color: #2e59d9;
-    color: white;
-    border-radius: 50%;
+    color: #2e59d9;
     width: 20px;
     height: 20px;
     text-align: center;
@@ -272,10 +291,10 @@ form select {
     border-radius: 5px;
     white-space: normal;
     font-size: 12px;
-    z-index: 1000;
+    z-index: 9998;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    width: 600px;
-    height: 100px;
+    width: 350px;
+    height: auto;
     text-align: left;
     padding: 0.5rem;
 }
@@ -283,6 +302,7 @@ form select {
 .tooltip-icon:hover::after {
     display: block;
     opacity: 1;
+    z-index: 9999;
 }
 
 /* Add Temp Topic */

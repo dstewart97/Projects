@@ -12,7 +12,7 @@
 <body></body>
 <div class="wrapper">
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" role="navigation" aria-label="Main Navigation">
         <div class="sidebar-header">
             <h2>JEDlabs Tools</h2>
             <button id="toggle-sidebar" class="toggle-btn" aria-label="Toggle Sidebar">&#9776;</button>
@@ -27,6 +27,7 @@
 
     <!-- Main Content -->
     <main class="content">
+        <h1>Analyze and Categorize Your Text Data</h1>
         <div class="instructions-container">
             <p><span>Welcome to textScope &#x1F918;!</span><br><br>
                 This tool uses a keyword-based algorithm to scan your text for predefined or custom topics. It assigns a
@@ -76,37 +77,28 @@
             {% csrf_token %}
             <label for="selected_column"><strong>Select Text Column to Analyze:</strong></label>
             <select name="selected_column" required>
+                <option value="" disabled selected>Select a Category</option>
                 {% for col, label in column_choices %}
                 <option value="{{ col }}">{{ label }}</option>
                 {% endfor %}
             </select>
-            <h3 style="font-size: 1.2rem; text-align: center; text-decoration: underline; color: #2e59d9;">Select Topics to use for Categorization</h3>
+            <h3 style="font-size: 1.2rem; text-align: center; text-decoration: underline; color: #2e59d9;">Select Topics
+                to use for Categorization</h3>
             <div>
                 <!-- Permanenet Topics from Database -->
-                <h4 style="margin-bottom: 5px; text-decoration: underline; font-weight: 700;">Built-In Topics:</h4>
-                {% for topic in permanent_topics %}
-                <div class="checkbox-group">
-                    <input type="checkbox" id="topic_{{ topic.id }}" name="selected_topics" value="{{ topic.id }}">
-                    <label for="topic_{{ topic.id }}">
-                        {{ topic.key }}
-                        <span class="tooltip-icon" data-tooltip="{{ topic.tooltip_text }}">?</span>
-                    </label>
+                <h4 style="margin-bottom: 5px; text-decoration: underline; font-weight: 700;">Available Topics:</h4>
+                <input type="text" id="topicSearch" placeholder="Search Topics...">
+                <div class="checkbox-scroll-container" id="topicList">
+                    {% for topic in permanent_topics %}
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="topic_{{ topic.id }}" name="selected_topics" value="{{ topic.id }}">
+                        <label for="topic_{{ topic.id }}">
+                            {{ topic.key }}
+                            <span class="tooltip-icon" data-tooltip="{{ topic.tooltip_text }}">?</span>
+                        </label>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-                <!-- Session Based Topics
-                {% if session_topics %}
-                <h4>Temporary Topics:</h4>
-                {% for topic in session_topics %}
-                <div id="session-topics" class="checkbox-group">
-                    <input type="checkbox" id="session_topic_{{ forloop.counter }}" name="selected_topics"
-                        value="session_{{ forloop.counter }}">
-                    <label for="session_topic_{{ forloop.counter }}">
-                        {{ topic.key }}
-                        <span class="tooltip-icon" data-tooltip="{{ session_topic_.tooltip_text }}">?</span>
-                    </label>
-                </div>
-                {% endfor %}
-                {% endif %} -->
             </div>
             <button type="submit" id="process-data-btn" name="process_data">Process Data</button>
         </form>
