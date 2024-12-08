@@ -12,7 +12,7 @@ function updateFileName() {
 
 
 // Toggle sidebar pop-out on main view
-document.getElementById('toggle-sidebar').addEventListener('click', function() {
+document.getElementById('toggle-sidebar').addEventListener('click', function () {
     document.querySelector('.sidebar').classList.toggle('sidebar-collapsed');
     document.querySelector('.content').classList.toggle('expanded');
 });
@@ -110,41 +110,41 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data)
-            if (data.success) {
-                // Dynamically append the new topic checkbox
-                const newTopicHTML = `
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (data.success) {
+                    // Dynamically append the new topic checkbox
+                    const newTopicHTML = `
                 <div class="checkbox-group">
                     <input type="checkbox" id="session_topic_${data.topic.id}" name="selected_topics" value="session_${data.topic.id}">
                     <label for="session_topic_${data.topic.id}">
                         ${data.topic.key}
                     </label>
                 </div>`;
-                tempTopicsContainer.insertAdjacentHTML('beforeend', newTopicHTML);
+                    tempTopicsContainer.insertAdjacentHTML('beforeend', newTopicHTML);
 
-                // Reset form after success
-                form.reset();
-                modal.style.display = "none";  // Hide modal after successful submission
-            } else {
-                alert('Error adding topic: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An unexpected error occurred.');
-        });
+                    // Reset form after success
+                    form.reset();
+                    modal.style.display = "none";  // Hide modal after successful submission
+                } else {
+                    alert('Error adding topic: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An unexpected error occurred.');
+            });
     });
 });
 
 
 // Search bar functionality for Available Topics
-document.getElementById('topicSearch').addEventListener('keyup', function() {
+document.getElementById('topicSearch').addEventListener('keyup', function () {
     const searchValue = this.value.toLowerCase();
     const topics = document.querySelectorAll('#topicList .checkbox-group');
 
-    topics.forEach(function(topic) {
+    topics.forEach(function (topic) {
         const topicLabel = topic.querySelector('label').innerText.toLowerCase();
         if (topicLabel.includes(searchValue)) {
             topic.style.display = 'block';
@@ -153,3 +153,29 @@ document.getElementById('topicSearch').addEventListener('keyup', function() {
         }
     });
 });
+
+
+// TIp Modal
+document.addEventListener('DOMContentLoaded', function () {
+    // Get the modal and the button that opens it
+    var modal = document.getElementById("tip-modal");
+    var btn = document.getElementById("tip-jar-btn");
+    var span = document.getElementById("tipModalClose");
+
+    // When the user clicks the button, open the modal
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks the close button, close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+})

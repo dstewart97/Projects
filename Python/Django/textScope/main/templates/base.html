@@ -38,11 +38,12 @@
         <main class="content">
             <div class="tip-jar">
                 <div class="tip-jar-icons">
-                    <span class="tip-icon">💸</span> 
-                    <span class="crypto-icon">₿</span> 
+                    <span id="tip-jar-btn" class="tip-icon">💸</span> 
+                    <span id="tip-jar-btn" class="crypto-icon">₿</span> 
                 </div>
             </div>
             {% block content %}{% endblock content %}
+            <!-- Footer Section -->
             <footer class="footer">
                 <div class="footer-links">
                     <a href="{% url 'terms_of_service' %}">Terms of Service</a> |
@@ -53,7 +54,16 @@
             </footer>
         </main>
     </div>
-    <!-- Footer Section -->
+    <div id="tip-modal" class="modal">
+        <div class="modal-content">
+            <span id="tipModalClose" class="close">&times;</span>
+            <h3>Support Me on:</h3>
+            <ul>
+                <li><a href="https://www.paypal.me/YourName" target="_blank"><button class="paypal-btn">PayPal</button></a></li>
+                <li><a href="https://venmo.com/YourUsername" target="_blank"><button class="venmo-btn">Venmo</button></a></li>
+                <li><a href="https://cash.app/$YourUsername" target="_blank"><button class="cashapp-btn">CashApp</button></a></li>
+            </ul>
+        </div>
+    </div>
 </body>
-
 </html>

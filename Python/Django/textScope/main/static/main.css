@@ -29,7 +29,7 @@ body, html {
 
 /* Buttons */
 form button {
-    background: #2e59d9; /* Blue or purple accent */
+    background: #2e59d9; 
     color: #fff;
     padding: 10px 20px;
     font-size: 1rem;
@@ -91,7 +91,7 @@ form button:hover {
 .tip-icon:hover,
 .crypto-icon:hover {
     transform: scale(1.2);
-    transition: transform 0.2s ease-in;
+    transition: transform 0.2s ease-in-out;
 }
 
 /* Sidebar*/
@@ -101,8 +101,7 @@ form button:hover {
     color: white;
     padding: 20px;
     height: 100%;
-    overflow: auto;
-    transition: width 0.3s ease; /* Smooth sidebar width change */
+    transition: width 0.3s ease; 
 }
 
 .wrapper.sidebar-collapsed {
