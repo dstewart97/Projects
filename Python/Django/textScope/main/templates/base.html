@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic Categorization Tool</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+</head>
+
+<body>
+<div class="wrapper">
+    <!-- Sidebar -->
+    <aside class="sidebar" role="navigation" aria-label="Main Navigation">
+        <div class="sidebar-header">
+            <h2>JEDlabs Tools</h2>
+            <button id="toggle-sidebar" class="toggle-btn" aria-label="Toggle Sidebar">&#9776;</button>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="{% if current_url == '/' %}active{% endif %}">
+                <a href="{% url 'tool_view' %}">TextScope</a></li>
+            <li>
+                <a href="#">Feature 2 (Coming Soon)</a></li>
+            <li>
+                <a href="#">Feature 3 (Coming Soon)</a></li>
+            <li>
+                <a href="#">Settings</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+        {% block content %}{% endblock content %}
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="{% url 'terms_of_service' %}">Terms of Service</a> |
+                <a href="{% url 'privacy_policy' %}">Privacy Policy</a> |
+                <a href="{% url 'contact_view' %}">Contact Us</a>
+            </div>
+            <p>&copy; {% now 'Y' %} JEDlabs. All Rights Reserved.</p>
+         </footer>
+    </main>
+</div>
+    <!-- Footer Section -->
+</body>
+</html>

@@ -1,171 +1,142 @@
+{% extends 'base.html' %}
+{% block content %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Topic Categorization Tool</title>
-    <link rel="stylesheet" href="{% static 'main.css' %}">
-</head>
 
-<body></body>
-<div class="wrapper">
-    <!-- Sidebar -->
-    <aside class="sidebar" role="navigation" aria-label="Main Navigation">
-        <div class="sidebar-header">
-            <h2>JEDlabs Tools</h2>
-            <button id="toggle-sidebar" class="toggle-btn" aria-label="Toggle Sidebar">&#9776;</button>
-        </div>
-        <ul class="sidebar-menu">
-            <li><a href="{% url 'tool_view' %}">Topic Categorization</a></li>
-            <li><a href="#">Feature 2 (Coming Soon)</a></li>
-            <li><a href="#">Feature 3 (Coming Soon)</a></li>
-            <li><a href="#">Settings</a></li>
-        </ul>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="content">
-        <h1>Analyze and Categorize Your Text Data</h1>
-        <div class="instructions-container">
-            <p><span>Welcome to textScope &#x1F918;!</span><br><br>
-                This tool uses a keyword-based algorithm to scan your text for predefined or custom topics. It assigns a
-                <strong>Dominant Topic</strong> based on frequency and highlights additional <strong>Subtopics</strong>
-                for deeper insights. Whether you're analyzing customer feedback, survey responses, or any text-heavy
-                dataset, this tool helps you categorize and understand your data efficiently.
-            </p>
-        </div>
-        <!-- File Upload Form -->
-        <h2>Step 1: Upload a CSV or XLSX File</h2>
-        <form id="upload-form" method="POST" enctype="multipart/form-data">
-            <div id="file-upload-div">
-                <h3>*Data uploaded will only persist in this session; no data is stored</h3>
-                <h3>*XLS files are not accepted</h3>
-                <h3>*Files exceeding 3,000KB are not accepted</h3>
-            </div>
-            {% csrf_token %}
-            <label for="file-input" class="custom-file-upload">Choose File</label>
-            <input type="file" name="file" id="file-input" style="display:none;" onchange="updateFileName()">
-            <span id="file-name">No file selected</span>
-            <div id="loading-spinner" style="display: none;">
-                <div class="spinner"></div>
-                <p>Uploading File...</p>
-            </div>
-            {% if messages %}
-            <div id="messages-container" class="messages-container">
-                {% for message in messages %}
-                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                <div class="message-success">{{ message }}</div>
-                {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                <div class="message-error">{{ message }}</div>
-                {% else %}
-                <div class="message">{{ message }}</div>
-                {% endif %}
-                {% endfor %}
-            </div>
-            {% endif %}
-            <button type="submit">Upload File</button>
-        </form>
-
-        <!-- Step 2: Select Column for Text Analysis -->
-        <h2 style="margin-bottom: 0;">Step 2: Select Text Column and Topics for Text Analysis</h2>
-        <div class="temp-topic-container">
-            <button id="openModalBtn" class="temp-topic-btn">⭐ Add Temporary Topic</button>
-        </div>
-        <form method="POST">
-            {% csrf_token %}
-            <label for="selected_column"><strong>Select Text Column to Analyze:</strong></label>
-            <select name="selected_column" required>
-                <option value="" disabled selected>Select a Category</option>
-                {% for col, label in column_choices %}
-                <option value="{{ col }}">{{ label }}</option>
-                {% endfor %}
-            </select>
-            <h3 style="font-size: 1.2rem; text-align: center; text-decoration: underline; color: #2e59d9;">Select Topics
-                to use for Categorization</h3>
-            <div>
-                <!-- Permanenet Topics from Database -->
-                <h4 style="margin-bottom: 5px; text-decoration: underline; font-weight: 700;">Available Topics:</h4>
-                <input type="text" id="topicSearch" placeholder="Search Topics...">
-                <div class="checkbox-scroll-container" id="topicList">
-                    {% for topic in permanent_topics %}
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="topic_{{ topic.id }}" name="selected_topics" value="{{ topic.id }}">
-                        <label for="topic_{{ topic.id }}">
-                            {{ topic.key }}
-                            <span class="tooltip-icon" data-tooltip="{{ topic.tooltip_text }}">?</span>
-                        </label>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            <button type="submit" id="process-data-btn" name="process_data">Process Data</button>
-        </form>
-        <!-- Add Temporary Topic Form -->
-        <div id="addTopicModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h4>Add Temporary Topic</h4>
-                <form id="add-topic-form" method="POST">
-                    {% csrf_token %}
-                    <input type="text" name="session_topic_name" placeholder="Topic Name" required>
-                    <textarea name="session_topic_keywords" placeholder="Keywords (comma-seperated)"
-                        required></textarea>
-                    <button type="submit">Add Topic</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="loader-container">
-            <div class="loader">
-                <div class="inner one"></div>
-                <div class="inner two"></div>
-                <div class="inner three"></div>
-            </div>
-        </div>
-
-        {% if column_selected %}
-        <div class="table-container">
-            <h2>Processed Data &#x1F680;</h2>
-            <p>The below table is a sample of the first 10 rows</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Selected Text</th>
-                        <th>Dominant Topic</th>
-                        <th>Subtopics</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in processed_data %}
-                    <tr>
-                        <td>{{ row.selected_text }}</td>
-                        <td>{{ row.dominant_topic }}</td>
-                        <td>{{ row.subtopics }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="export-container">
-            <div class="export-btn-container">
-                <a href="{% url 'export_data' 'csv' %}">Export as CSV</a> |
-                <a href="{% url 'export_data' 'xlsx' %}">Export as XLSX</a>
-            </div>
-        </div>
-
+<h1>Analyze and Categorize Your Text Data</h1>
+<div class="instructions-container">
+    <p><span>Welcome to textScope &#x1F918;!</span><br><br>
+        This tool uses a keyword-based algorithm to scan your text for predefined or custom topics. It assigns a
+        <strong>Dominant Topic</strong> based on frequency and highlights additional <strong>Subtopics</strong>
+        for deeper insights. Whether you're analyzing customer feedback, survey responses, or any text-heavy
+        dataset, this tool helps you categorize and understand your data efficiently.
+    </p>
+</div>
+<!-- File Upload Form -->
+<h2>Step 1: Upload a CSV or XLSX File</h2>
+<form id="upload-form" method="POST" enctype="multipart/form-data">
+    <div id="file-upload-div">
+        <h3>*Data uploaded will only persist in this session; no data is stored</h3>
+        <h3>*XLS files are not accepted</h3>
+        <h3>*Files exceeding 3,000KB are not accepted</h3>
+    </div>
+    {% csrf_token %}
+    <label for="file-input" class="custom-file-upload">Choose File</label>
+    <input type="file" name="file" id="file-input" style="display:none;" onchange="updateFileName()">
+    <span id="file-name">No file selected</span>
+    <div id="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Uploading File...</p>
+    </div>
+    {% if messages %}
+    <div id="messages-container" class="messages-container">
+        {% for message in messages %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+        <div class="message-success">{{ message }}</div>
+        {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="message-error">{{ message }}</div>
+        {% else %}
+        <div class="message">{{ message }}</div>
         {% endif %}
-        <div class="reset-container">
-            <form method="POST">
-                {% csrf_token %}
-                <button type="submit" name="reset" value="true">Start Over</button>
-            </form>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <button type="submit">Upload File</button>
+</form>
+
+<!-- Step 2: Select Column for Text Analysis -->
+<h2 style="margin-bottom: 0;">Step 2: Select Text Column and Topics for Text Analysis</h2>
+<div class="temp-topic-container">
+    <button id="openModalBtn" class="temp-topic-btn">⭐ Add Temporary Topic</button>
+</div>
+<form method="POST">
+    {% csrf_token %}
+    <label for="selected_column"><strong>Select Text Column to Analyze:</strong></label>
+    <select name="selected_column" required>
+        <option value="" disabled selected>Select a Category</option>
+        {% for col, label in column_choices %}
+        <option value="{{ col }}">{{ label }}</option>
+        {% endfor %}
+    </select>
+    <h3 style="font-size: 1.2rem; text-align: center; text-decoration: underline; color: #2e59d9;">Select Topics
+        to use for Categorization</h3>
+    <div>
+        <!-- Permanenet Topics from Database -->
+        <h4 style="margin-bottom: 5px; text-decoration: underline; font-weight: 700;">Available Topics:</h4>
+        <input type="text" id="topicSearch" placeholder="Search Topics...">
+        <div class="checkbox-scroll-container" id="topicList">
+            {% for topic in permanent_topics %}
+            <div class="checkbox-group">
+                <input type="checkbox" id="topic_{{ topic.id }}" name="selected_topics" value="{{ topic.id }}">
+                <label for="topic_{{ topic.id }}">
+                    {{ topic.key }}
+                    <span class="tooltip-icon" data-tooltip="{{ topic.tooltip_text }}">?</span>
+                </label>
+            </div>
+            {% endfor %}
         </div>
-    </main>
+    </div>
+    <button type="submit" id="process-data-btn" name="process_data">Process Data</button>
+</form>
+<!-- Add Temporary Topic Form -->
+<div id="addTopicModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h4>Add Temporary Topic</h4>
+        <form id="add-topic-form" method="POST">
+            {% csrf_token %}
+            <input type="text" name="session_topic_name" placeholder="Topic Name" required>
+            <textarea name="session_topic_keywords" placeholder="Keywords (comma-seperated)" required></textarea>
+            <button type="submit">Add Topic</button>
+        </form>
+    </div>
+</div>
+
+
+<div class="loader-container">
+    <div class="loader">
+        <div class="inner one"></div>
+        <div class="inner two"></div>
+        <div class="inner three"></div>
+    </div>
+</div>
+
+{% if column_selected %}
+<div class="table-container">
+    <h2>Processed Data &#x1F680;</h2>
+    <p>The below table is a sample of the first 10 rows</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Selected Text</th>
+                <th>Dominant Topic</th>
+                <th>Subtopics</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in processed_data %}
+            <tr>
+                <td>{{ row.selected_text }}</td>
+                <td>{{ row.dominant_topic }}</td>
+                <td>{{ row.subtopics }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="export-container">
+    <div class="export-btn-container">
+        <a href="{% url 'export_data' 'csv' %}">Export as CSV</a> |
+        <a href="{% url 'export_data' 'xlsx' %}">Export as XLSX</a>
+    </div>
+</div>
+
+{% endif %}
+<div class="reset-container">
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" name="reset" value="true">Start Over</button>
+    </form>
 </div>
 <script src="{% static 'main.js' %}"></script>
-</body>
-
-
-</html>
+{% endblock content %}

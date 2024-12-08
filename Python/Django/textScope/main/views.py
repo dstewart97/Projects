@@ -3,16 +3,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
-from .forms import FileUploadForm, SelectTopicsForm, TopicForm
+from django.core.mail import send_mail, EmailMessage
+from django.conf import settings
+from datetime import datetime
+from .forms import FileUploadForm, SelectTopicsForm, TopicForm, ContactForm
 from .models import Topic
 from io import StringIO
 import time
 import csv
 import json
 
-
-import logging
-logging.basicConfig(level=logging.DEBUG)
 
 def handle_uploaded_file(file):
     """Handles file upload and returns the data in a DataFrame."""
@@ -25,7 +25,6 @@ def handle_uploaded_file(file):
 
 
 def process_topics(data, selected_topics, selected_column):
-    logging.debug(f"Selected Topics: {selected_topics}")
     """Process the topics by matching exact phrases in the selected column with the selected topics."""
     # Build the topics dictionary from the selected topics, ensuring case-insensitive matching
     # topics = {topic.key.lower(): [value.lower() for value in topic.values.split(',')] for topic in selected_topics}
@@ -147,7 +146,8 @@ def tool_view(request):
                 'column_selected': True,
                 'processed_data': processed_data_dict,
                 'permanent_topics': permanent_topics,
-                'session_topics': session_topics
+                'session_topics': session_topics,
+                'current_url': request.path
             })
         
         # Handle File Upload
@@ -162,6 +162,7 @@ def tool_view(request):
                 messages.error(request, "Invalid file type...only CSV and XLSX will be processed")
             else:
                 data = handle_uploaded_file(file)
+                time.sleep(2)
                 messages.success(request, "File uploaded successfully...")
                 if data is None:
                     messages.error(request, "Invalid file type...only CSV and XLSX will be processed") 
@@ -176,7 +177,8 @@ def tool_view(request):
                     'column_choices': column_choices,
                     'topics': topics,
                     'permanent_topics': permanent_topics,
-                    'session_topics': session_topics
+                    'session_topics': session_topics,
+                    'current_url': request.path
                 })
             
         # Handle Reset
@@ -193,13 +195,13 @@ def tool_view(request):
         'column_selected': False,
         'topics': combined_topics,
         'permanent_topics': permanent_topics,
-        'session_topics': session_topics
+        'session_topics': session_topics,
+        'current_url': request.path
     })
 
 
 
 def add_temp_topic(request):
-    print(f"Received {request.method} request")
     if request.method == 'POST':
         try:
             topic_name = request.POST.get('session_topic_name')
@@ -228,3 +230,43 @@ def add_temp_topic(request):
 
     else:
         return JsonResponse({'success': False, 'message': 'Invalid request method'})
+    
+
+# Footer for Ad compliance
+def terms_of_service(request):
+    return render(request, 'terms_of_service.html')
+
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html')
+
+
+# Contact formn and email submission
+def contact_view(request):
+    if request.method == 'POST':
+        contactForm = ContactForm(request.POST)
+        if contactForm.is_valid():
+            user_email = contactForm.cleaned_data['email']
+            subject = f"New message from {contactForm.cleaned_data['name']}"
+            message = contactForm.cleaned_data['message']
+
+            # Create the email message
+            email = EmailMessage(
+                subject,  # Subject
+                message,  # Message body
+                user_email,  # From the user's email
+                ['textscopeanalytics@gmail.com'],  # To your custom email
+            )
+
+            # Set the "Reply-To" header to the user's email
+            email.reply_to = [user_email]
+
+            # Send the email
+            email.send(fail_silently=False)
+
+            # Display a success message
+            messages.success(request, 'Message sent successfully!' )
+            return redirect('contact_view')
+    else:
+        contactForm = ContactForm()
+
+    return render(request, 'contact.html', {'contactForm': contactForm})

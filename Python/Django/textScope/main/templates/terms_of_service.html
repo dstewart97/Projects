@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="tos-container">
+    <h1>Terms of Service</h1>
+    <p style="margin-top: 3px; font-size: 0.8rem;"><i>Effective Date: December 2024</i></p>
+    <p style="margin-bottom: 30px;">Welcome to JEDlabs’ textScope tool. By accessing or using this website, you agree to comply with and be bound by these Terms of Service (“Terms”).</p>
+    <section>
+        <h2>1. Use of the Site</h2>
+        <p>The Site is designed as a utility tool for analyzing and categorizing text. By using the Site, you agree to:</p>
+            <ul>
+                <li>
+                    Use the Site in a lawful manner.
+                </li>
+                <li>
+                    Not upload content that is illegal, harmful, or violates the rights of others.
+                </li>
+            </ul>
+    </section>
+    <section>
+        <h2>2. No Data Retention</h2>
+        <p>The Site operates entirely on session-based processing. We do not store any files, user inputs, or categorized data beyond the current session. All user-generated data is deleted when the session ends.</p>
+    </section>
+    <section>
+        <h2>3. Intellectual Property</h2>
+        <p>The Site and all its content, including but not limited to text, graphics, and software, are the property of JEDlabs and are protected by intellectual property laws. You may not reproduce, distribute, or create derivative works from the Site without prior written consent.</p>
+    </section>
+    <section>
+        <h2>4. Disclaimer of Warranties</h2>
+        <p>The Site is provided on an “as-is” and “as-available” basis without warranties of any kind, either express or implied. We disclaim all warranties, including but not limited to:</p>
+        <ul>
+            <li>
+                The accuracy or reliability of the categorization results.
+            </li>
+            <li>
+                The uninterrupted or error-free operation of the Site.
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>5. Limitation of Liability</h2>
+        <p>To the fullest extent permitted by law, JEDlabs shall not be liable for any damages arising from:</p>
+        <ul>
+            <li>
+                Your use of the Site.
+            </li>
+            <li>
+                Any errors, omissions, or inaccuracies in the Site’s content.
+            </li>
+            <li>
+                Temporary unavailability of the Site.
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>6. Changes to These Terms</h2>
+        <p>We reserve the right to modify these Terms at any time. Any changes will be effective immediately upon posting. Continued use of the Site after changes constitutes your acceptance of the revised Terms.</p>
+    </section>
+    <section>
+        <h2>7. Contact Information</h2>
+        <p>For questions, please contact us via our <a href="{% url 'contact_view' %}">contact form.</a></p>
+    </section>
+</div>
+
+<script src="{% static 'main.js' %}"></script>
+{% endblock content %}

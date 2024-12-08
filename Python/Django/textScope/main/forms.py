@@ -31,3 +31,11 @@ class SelectTopicsForm(forms.Form):
 # Accepts .csv or .xlsx files for processing.
 class FileUploadForm(forms.Form):
     file = forms.FileField(label = "Upload CSV or XLSX file")
+
+
+
+# Contact Form
+class ContactForm(forms.Form):
+    name = forms.CharField(label="Your Name", max_length=100)
+    email = forms.EmailField(label="Your Email")
+    message = forms.CharField(label="Your Message", widget=forms.Textarea)

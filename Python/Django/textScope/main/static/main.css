@@ -8,8 +8,8 @@ body, html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-
 }
+
 
 .content h1 {
     font-size: 1.5rem;
@@ -50,18 +50,24 @@ form button:hover {
 }
 
 .wrapper {
-    display: flex;
+    display: grid;
+    grid-template-columns: 340px 1fr; /* Sidebar width + Content */
     min-height: 100vh;
+    transition: grid-template-columns 0.3s ease; /* Smooth transition */
 }
 
 .sidebar {
-    width: 300px;
+    grid-column: 1;
     background-color: #2c3e50;
     color: white;
     padding: 20px;
-    position: fixed;
     height: 100%;
     overflow: auto;
+    transition: width 0.3s ease; /* Smooth sidebar width change */
+}
+
+.wrapper.sidebar-collapsed {
+    grid-template-columns: 100px 1fr; /* Shrink sidebar, let content grow */
 }
 
 .sidebar-header {
@@ -87,6 +93,17 @@ form button:hover {
     margin: 15px 0;
 }
 
+.sidebar-menu li.active {
+    background-color: white; 
+    width: 350px;
+    border-radius: 20px;
+    border: none;
+}
+
+.sidebar-menu li.active a {
+    color: #2e59d9; /* Ensure the link is also white */
+}
+
 .sidebar-menu a {
     text-decoration: none;
     color: white;
@@ -94,11 +111,19 @@ form button:hover {
     display: block;
     padding: 10px 15px;
     border-radius: 5px;
-    transition: background-color 0.3s;
 }
 
-.sidebar-menu a:hover {
+/* Hover effect for non-active items */
+.sidebar-menu li:not(.active):hover {
     background-color: #34495e;
+    width: 350px;
+    border-radius: 20px;
+    border: none;
+}
+
+/* Optional: Styling for active links inside a non-active li */
+.sidebar-menu li:not(.active) a:hover {
+    color: #fff; /* Optional: change color on hover */
 }
 
 .toggle-btn {
@@ -119,7 +144,7 @@ form button:hover {
 }
 
 .sidebar-collapsed h2 {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
 }
 
 .sidebar-collapsed .toggle-btn {
@@ -138,11 +163,10 @@ form button:hover {
 }
 
 .content {
-    margin-left: 340px; /* Matches the sidebar width */
+    grid-column: 2;
     padding: 20px;
-    width: calc(100% - 340px);
+    background: #f8f9fa; /* Optional: Add background for clarity */
 }
-
 
 h1, h2{
     text-align: center;
@@ -522,11 +546,6 @@ h3 {
 a {
     color: #4e73df;
     text-decoration: none;
-    margin: 0 10px;
-}
-
-a:hover {
-    text-decoration: underline;
 }
 
 
@@ -582,6 +601,100 @@ a:hover {
 }
 
 
+
+/* Footer */
+.footer {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.footer-links a {
+    color: #007bff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+
+/* TOS */
+.tos-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.tos-container h1{
+    text-align: left;
+    padding: 0;
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+.tos-container h2{
+    text-align: left;
+    padding: 0;
+    margin: 0;
+}
+
+.tos-container section {
+    margin-bottom: 20px;
+}
+
+
+/* Contact Form */
+.contactForm-container form {
+    max-width: 500px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.contactForm-container form input[type="text"],
+.contactForm-container form input[type="email"],
+.contactForm-container form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    resize: none; /* Prevent textarea resizing */
+    box-sizing: border-box;
+}
+
+.contactForm-container form input[type="text"]:focus,
+.contactForm-container form input[type="email"]:focus,
+.contactForm-container form textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+
+/* Error message styling */
+.contactForm-container form .error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* COntact Form Intro Text */
+.contactForm-top-text {
+    width: 550px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
 
 /* Responsive Design */
