@@ -137,3 +137,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+
+// Search bar functionality for Available Topics
+document.getElementById('topicSearch').addEventListener('keyup', function() {
+    const searchValue = this.value.toLowerCase();
+    const topics = document.querySelectorAll('#topicList .checkbox-group');
+
+    topics.forEach(function(topic) {
+        const topicLabel = topic.querySelector('label').innerText.toLowerCase();
+        if (topicLabel.includes(searchValue)) {
+            topic.style.display = 'block';
+        } else {
+            topic.style.display = 'none';
+        }
+    });
+});
