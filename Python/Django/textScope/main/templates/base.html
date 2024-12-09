@@ -11,58 +11,67 @@
 
 <body>
 
-    <div class="wrapper">
-        <!-- Sidebar -->
-        <aside class="sidebar" role="navigation" aria-label="Main Navigation">
-            <div class="sidebar-header">
-                <h2>JEDlabs Tools</h2>
-                <button id="toggle-sidebar" class="toggle-btn" aria-label="Toggle Sidebar">&#9776;</button>
-            </div>
-            <ul class="sidebar-menu">
-                <li class="{% if current_url == '/' %}active{% endif %}">
-                    <a href="{% url 'tool_view' %}">TextScope</a>
-                </li>
-                <li>
-                    <a href="#">Feature 2 (Coming Soon)</a>
-                </li>
-                <li>
-                    <a href="#">Feature 3 (Coming Soon)</a>
-                </li>
-                <li>
-                    <a href="#">Settings</a>
-                </li>
-            </ul>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="content">
+    <!-- Main Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">JEDlabs Tools</h1>
+            <nav class="header-links">
+                <a href="#">Home</a>
+                <a href="#">Home</a>
+                <a href="#">Home</a>
+                <a href="{% url 'tool_view' %}" class="{% if current_url == '/' %}active{% endif %}">TextScope</a>
+                <a href="#">Tool 2 (Coming Soon)</a>
+                <a href="#">Tool 3 (Coming Soon)</a>
+                <a href="#">Settings</a>
+            </nav>
             <div class="tip-jar">
                 <div class="tip-jar-icons">
                     <span id="tip-jar-btn" class="tip-icon">💸</span> 
-                    <span id="tip-jar-btn" class="crypto-icon">₿</span> 
+                    <span id="crypto-tip-btn" class="crypto-icon">₿</span> 
                 </div>
             </div>
-            {% block content %}{% endblock content %}
-            <!-- Footer Section -->
-            <footer class="footer">
-                <div class="footer-links">
-                    <a href="{% url 'terms_of_service' %}">Terms of Service</a> |
-                    <a href="{% url 'privacy_policy' %}">Privacy Policy</a> |
-                    <a href="{% url 'contact_view' %}">Contact Us</a>
-                </div>
-                <p>&copy; {% now 'Y' %} JEDlabs. All Rights Reserved.</p>
-            </footer>
-        </main>
-    </div>
-    <div id="tip-modal" class="modal">
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="content">
+        {% block content %}{% endblock content %}
+
+        <!-- Footer Section -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="{% url 'terms_of_service' %}">Terms of Service</a> |
+                <a href="{% url 'privacy_policy' %}">Privacy Policy</a> |
+                <a href="{% url 'contact_view' %}">Contact Us</a>
+            </div>
+            <p>&copy; {% now 'Y' %} JEDlabs. All Rights Reserved.</p>
+        </footer>
+    </main>
+
+    <!-- Tip Modal -->
+    <div id="tip-modal" class="modal tip-jar-modal">
         <div class="modal-content">
             <span id="tipModalClose" class="close">&times;</span>
-            <h3>Support Me on:</h3>
-            <ul>
-                <li><a href="https://www.paypal.me/YourName" target="_blank"><button class="paypal-btn">PayPal</button></a></li>
-                <li><a href="https://venmo.com/YourUsername" target="_blank"><button class="venmo-btn">Venmo</button></a></li>
-                <li><a href="https://cash.app/$YourUsername" target="_blank"><button class="cashapp-btn">CashApp</button></a></li>
-            </ul>
+            <h3>We ❤️ Tips</h3>
+            <span style="font-size: 0.7rem;">(and not just the advice kind!)</span>
+            <p>Every little bit helps us keep building awesome tools. Thanks for making us smile!</p>
+            <div class="card-container">
+                <div class="card">
+                    <img src="{% static 'media/paypal.png' %}" alt="PayPal">
+                    <p>PayPal</p>
+                    <button><a href="https://paypal.me/YourName" target="_blank">Donate</a></button>
+                </div>
+                <div class="card">
+                    <img src="{% static 'media/venmo.png' %}" alt="Venmo">
+                    <p>Venmo</p>
+                    <button><a href="https://venmo.com/YourName" target="_blank">Donate</a></button>
+                </div>
+                <div class="card">
+                    <img src="{% static 'media/cashapp.png' %}" alt="CashApp">
+                    <p>CashApp</p>
+                    <button><a href="https://cashapp.com/YourName" target="_blank">Donate</a></button>
+                </div>
+            </div>
         </div>
     </div>
 </body>

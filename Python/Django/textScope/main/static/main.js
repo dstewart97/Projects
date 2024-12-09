@@ -1,21 +1,9 @@
-
-
 // Updates the name when a file is uploaded
 function updateFileName() {
     var fileInput = document.getElementById('file-input');
     var fileName = fileInput.files[0] ? fileInput.files[0].name : 'No file selected';
     document.getElementById('file-name').innerText = fileName;
 };
-
-
-
-
-
-// Toggle sidebar pop-out on main view
-document.getElementById('toggle-sidebar').addEventListener('click', function () {
-    document.querySelector('.sidebar').classList.toggle('sidebar-collapsed');
-    document.querySelector('.content').classList.toggle('expanded');
-});
 
 
 
@@ -155,15 +143,21 @@ document.getElementById('topicSearch').addEventListener('keyup', function () {
 });
 
 
-// TIp Modal
+// Tip Modal
 document.addEventListener('DOMContentLoaded', function () {
     // Get the modal and the button that opens it
     var modal = document.getElementById("tip-modal");
     var btn = document.getElementById("tip-jar-btn");
+    var cryptoBtn = document.getElementById("crypto-tip-btn"); // Add this to handle the other button
     var span = document.getElementById("tipModalClose");
 
-    // When the user clicks the button, open the modal
+    // When the user clicks the tip button, open the modal
     btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks the crypto button, open the modal (optional action)
+    cryptoBtn.onclick = function () {
         modal.style.display = "block";
     }
 
@@ -178,4 +172,4 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.style.display = "none";
         }
     }
-})
+});
