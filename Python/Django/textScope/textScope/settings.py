@@ -123,7 +123,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Timeout setting for Session Cookies
-SESSION_COOKIE_AGE = 3600
+SESSION_COOKIE_AGE = 3600  # 1 hour
+
+# Store session data in signed cookies (client-side session storage)
+# SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 
 # Email Settings

@@ -111,17 +111,20 @@ def tool_view(request):
     if request.method == 'POST':
         # Handle Process Data Form
         if 'process_data' in request.POST:
+            selected_column = request.POST.get('selected_column')
+            selected_topics_ids = request.POST.getlist('selected_topics')
+
+            # Check if inputs are missing
+            if not selected_column or not selected_topics_ids:
+                return HttpResponse("Please select a column and at least one topic for categorization.", status=400)
+
+            # Proceed with processing data
             data_json = request.session.get('data')
             if not data_json:
                 return HttpResponse("Session expired or data missing. Please upload a file again.", status=400)
             
             data = pd.read_json(data_json)
-            selected_column = request.POST.get('selected_column')
-            selected_topics_ids = request.POST.getlist('selected_topics')
 
-            if not selected_column or not selected_topics_ids:
-                return HttpResponse("Please select a column and at least one topic for categorization.", status=400)
-            
             permanent_topic_ids = []
             session_topic_keys = []
             
@@ -132,21 +135,24 @@ def tool_view(request):
                     permanent_topic_ids.append(int(topic_id))
 
             permanent_topics = Topic.objects.filter(id__in=permanent_topic_ids)
-
             session_topics_dict = {str(topic['id']): topic for topic in session_topics}
-
-            selected_topics = list(permanent_topics) + list(session_topics_dict.values())
+            selected_topics = list(permanent_topics) + [
+                session_topics_dict[key] for key in session_topic_keys if key in session_topics_dict
+            ]
             
             processed_data = process_topics(data, selected_topics, selected_column)
             request.session['processed_data'] = processed_data.to_json()
             time.sleep(5)
             processed_data_dict = processed_data.head(10).to_dict(orient='records')
+            combined_topics = list(permanent_topics) + session_topics
             return render(request, 'tool_view.html', {
                 'file_uploaded': True,
                 'column_selected': True,
                 'processed_data': processed_data_dict,
+                'topics': combined_topics,
                 'permanent_topics': permanent_topics,
                 'session_topics': session_topics,
+                'selected_topics': selected_topics,
                 'current_url': request.path
             })
         
@@ -170,12 +176,13 @@ def tool_view(request):
                 # Filter columns to include only text columns
                 text_columns = [col for col in data.columns if data[col].dtype == "object"]
                 column_choices = [(col, col) for col in text_columns]
+                combined_topics = list(permanent_topics) + session_topics
                 select_form = SelectTopicsForm(request.POST)
                 return render(request, 'tool_view.html', {
                     'file_uploaded': True,
                     'select_form': select_form,
                     'column_choices': column_choices,
-                    'topics': topics,
+                    'topics': combined_topics,
                     'permanent_topics': permanent_topics,
                     'session_topics': session_topics,
                     'current_url': request.path
@@ -219,8 +226,11 @@ def add_temp_topic(request):
             }
             # Save it to session
             session_topics = request.session.get('session_topics', [])
+            print(f"Before adding: {session_topics}")
             session_topics.append(new_topic)
             request.session['session_topics'] = session_topics
+            request.session.modified = True
+            print(f"After adding: {request.session.get('session_topics')}")
 
             # Return the newly created topic as JSON response
             return JsonResponse({'success': True, 'topic': new_topic})

@@ -17,12 +17,9 @@
             <h1 class="logo">JEDlabs Tools</h1>
             <nav class="header-links">
                 <a href="#">Home</a>
-                <a href="#">Home</a>
-                <a href="#">Home</a>
                 <a href="{% url 'tool_view' %}" class="{% if current_url == '/' %}active{% endif %}">TextScope</a>
                 <a href="#">Tool 2 (Coming Soon)</a>
                 <a href="#">Tool 3 (Coming Soon)</a>
-                <a href="#">Settings</a>
             </nav>
             <div class="tip-jar">
                 <div class="tip-jar-icons">
@@ -54,7 +51,7 @@
             <span id="tipModalClose" class="close">&times;</span>
             <h3>We ❤️ Tips</h3>
             <span style="font-size: 0.7rem;">(and not just the advice kind!)</span>
-            <p>Every little bit helps us keep building awesome tools. Thanks for making us smile!</p>
+            <p style="margin-bottom: 1rem;">Every little bit helps us keep building awesome tools. Thanks for making us smile!</p>
             <div class="card-container">
                 <div class="card">
                     <img src="{% static 'media/paypal.png' %}" alt="PayPal">

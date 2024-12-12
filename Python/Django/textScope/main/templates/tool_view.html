@@ -53,7 +53,7 @@
     {% csrf_token %}
     <label for="selected_column"><strong>Select Text Column to Analyze:</strong></label>
     <select name="selected_column" required>
-        <option value="" disabled selected>Select a Category</option>
+        <option value="" disabled selected>Select a Category (if blank upload file)</option>
         {% for col, label in column_choices %}
         <option value="{{ col }}">{{ label }}</option>
         {% endfor %}
@@ -76,18 +76,18 @@
             {% endfor %}
         </div>
     </div>
-    <button type="submit" id="process-data-btn" name="process_data">Process Data</button>
+    <button type="submit" id="process-data-btn" name="process_data" disabled>Process Data</button>
 </form>
-<!-- Add Temporary Topic Form -->
+<!-- Add Temporary Modal Topic Form -->
 <div id="addTopicModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h4>Add Temporary Topic</h4>
+        <h4 style="margin-bottom: 1rem;">Add Temporary Topic</h4>
         <form id="add-topic-form" method="POST">
             {% csrf_token %}
             <input type="text" name="session_topic_name" placeholder="Topic Name" required>
             <textarea name="session_topic_keywords" placeholder="Keywords (comma-seperated)" required></textarea>
-            <button type="submit">Add Topic</button>
+            <button name="ass-temp-topic" type="submit">Add Topic</button>
         </form>
     </div>
 </div>

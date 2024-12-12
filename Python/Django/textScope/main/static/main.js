@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // AJAX for Temporary Topic 
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById('add-topic-form');
-    const tempTopicsContainer = document.querySelector(".checkbox-group:last-of-type");
+    const topicListContainer  = document.getElementById("topicList");
     const modal = document.getElementById("addTopicModal");
     const openModalBtn = document.getElementById("openModalBtn");
     const closeModalBtn = modal.querySelector(".close");
@@ -107,10 +107,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="checkbox-group">
                     <input type="checkbox" id="session_topic_${data.topic.id}" name="selected_topics" value="session_${data.topic.id}">
                     <label for="session_topic_${data.topic.id}">
-                        ${data.topic.key}
+                        ${data.topic.key} <span style="font-size:0.6rem; font-style:italic;">(Temporary)</span>
+                        <span class="tooltip-icon" data-tooltip="${data.topic.values}">?</span>
                     </label>
                 </div>`;
-                    tempTopicsContainer.insertAdjacentHTML('beforeend', newTopicHTML);
+                    topicListContainer.insertAdjacentHTML('beforeend', newTopicHTML);
 
                     // Reset form after success
                     form.reset();
@@ -172,4 +173,35 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.style.display = "none";
         }
     }
+});
+
+
+
+// Form Validation for Process Data Button
+document.addEventListener("DOMContentLoaded", function () {
+    const processButton = document.querySelector('button[name="process_data"]');
+    const columnSelect = document.querySelector('select[name="selected_column"]'); // Assuming it's a dropdown
+    const topicCheckboxes = document.querySelectorAll('input[name="selected_topics"]');
+
+    function validateForm() {
+        const isColumnSelected = columnSelect && columnSelect.value !== "";
+        const areTopicsSelected = Array.from(topicCheckboxes).some(checkbox => checkbox.checked);
+
+        if (isColumnSelected && areTopicsSelected) {
+            processButton.disabled = false;
+        } else {
+            processButton.disabled = true;
+        }
+    }
+
+    // Run validation on change events
+    if (columnSelect) {
+        columnSelect.addEventListener("change", validateForm);
+    }
+    topicCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", validateForm);
+    });
+
+    // Initial validation
+    validateForm();
 });
