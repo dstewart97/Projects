@@ -1,0 +1,28 @@
+
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="contactForm-top-text">
+    <h1 style="margin-bottom: 0; font-size: 1rem; color: #4C426A;">Got a Question? Feedback?</h1>
+    <h1 style="font-size: 3rem; margin-top: 0;">Contact JEDLabs</h1>
+    <p style="margin-bottom: 0; margin-top: 0;"> Whether you have a question or a suggestion, we’d love to hear it!</p>
+    <p style="margin-top: 5px; margin-bottom: 3rem;">😊</p>
+</div>
+<div class="contactForm-container">
+    <form method="post">
+        {% csrf_token %}
+        <div class="contactForm">
+            {{ contactForm.as_p }}
+        </div>
+        <div class="message-success">
+            {% for message in messages %}
+            <p style="text-align: center;">{{ message }}</p>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<script src="{% static 'main.js' %}"></script>
+{% endblock content %}

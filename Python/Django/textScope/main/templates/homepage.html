@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+
+
+<!-- Hero Section -->
+<div class="hero">
+    <div class="hero-text">
+        <h1>Simplify Text Analytics</h1>
+        <p>Analyze, categorize, and explore your text data effortlessly.</p>
+        <div class="hero-buttons">
+            <a href="#" class="btn-primary">Try the Tools</a>
+            <a href="#" class="btn-secondary">Support the Site</a>
+        </div>
+    </div>
+</div>
+<div class="attribution-container">
+    <a class="attriution-link" href="https://www.vecteezy.com/free-vector/technology">Vectors by Vecteezy</a>
+</div>
+
+<!-- About Section -->
+<section class="about">
+    <div class="about-content">
+        <div class="about-text">
+            <h1>Hi, we're <span style="text-decoration: underline; color: #5649b0;">JEDlabs!</span></h1>
+            <p>JEDlabs Tools is a growing collection of free, easy-to-use tools designed to help with all kinds of analysis and buisness tasks.</p><br>
+            <p>Our tools prioritize privacy and usability-<span style="color: #8880A7; font-weight: bold;">no logins, no data collection, just helpful solutions you can trust.</span></p>
+        </div>
+        <div class="about-image">
+            <img src="{% static 'about.jpg' %}" alt="About textScope">
+        </div>
+    </div>
+    <div class="attribution-container">
+        <a class="attriution-link" href="https://www.vecteezy.com/free-vector/technology">Vectors by Vecteezy</a>
+    </div>
+</div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <h2>Why Choose JEDlabs?</h2>
+    <div class="features-grid">
+        <div class="features-card">
+            <span class="material-symbols-outlined feature-icon">settings</span>
+            <h3>Useful & Practical</h3>
+            <p>User-friendly tools designed to solve niche problems and simplify tasks</p>
+        </div>
+        <div class="features-card">
+            <span class="material-symbols-outlined feature-icon">lock</span>
+            <h3>Secure & Private</h3>
+            <p>No data is collected or stored beyond what's needed for your session.</p>
+        </div>
+        <div class="features-card">
+            <span class="material-symbols-outlined feature-icon">credit_card_off</span>
+            <h3>Always Free</h3>
+            <p>All tools are, and will always be, free to use-no hidden costs or subscriptions.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta">
+    <h2>Enjoying the Tools?</h2>
+    <p>Help keep textScope running by leaving a tip or sharing it with others!</p>
+    <a href="#" class="btn-primary">Leave a Tip</a>
+</section>
+
+<script src="{% static 'main.js' %}"></script>
+{% endblock content %}

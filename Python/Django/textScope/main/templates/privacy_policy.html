@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="tos-container">
+    <h1>Privacy Policy</h1>
+    <p style="margin-top: 3px; font-size: 0.8rem;"><i>Effective Date: December 2024</i></p>
+    <p style="margin-bottom: 30px;">JEDlabs (the “Company”, “we”, “us”, or “our”) is committed to protecting your privacy. This Privacy Policy outlines how we collect, use, and safeguard your information when you visit our website, textScope (the “Site”), a utility tool for topic categorization and text analysis.</p>
+    <section>
+        <h2>1. Information We Collect</h2>
+        <p>We do not collect or store any personal information. However, we use session cookies to manage temporary user-created topics. These cookies are stored locally in your browser and expire after about an hour.</p>
+    </section>
+    <section>
+        <h2>2. How We Use Cookies</h2>
+        <p>Cookies are essential for the proper functioning of the Site. Specifically, we use cookies for:</p>
+        <ul>
+            <li>
+                <b>Session Management: </b> To allow users to create and use temporary topics during their session.
+            </li>
+            <li>
+                <b>Analytics (if applicable):</b> If we integrate third-party tools like Google Analytics in the future, they may use cookies to track usage patterns.
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>3. Third-Party Services</h2>
+        <p>While we do not currently use third-party services, we may in the future (e.g., Google Ads or Google Analytics). When this occurs, our Privacy Policy will be updated to reflect how those services process user data.</p>
+    </section>
+    <section>
+        <h2>4. Data Retention</h2>
+        <p>We do not retain any user-uploaded data. All uploaded files and user inputs are processed in the browser and cleared after the session ends.</p>
+    </section>
+    <section>
+        <h2>5. User Rights</h2>
+        <p>If you are located in certain regions (e.g., the EU under the GDPR or California under the CCPA), you have the right to:</p>
+        <ul>
+            <li>
+                Request information about the cookies used.
+            </li>
+            <li>
+                Withdraw consent for cookies via your browser settings.
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>6. Cookies & Consent Management</h2>
+        <p>Upon your first visit, a cookie consent banner will appear (if required by law) to inform you of our cookie usage and allow you to manage your preferences.</p>
+    </section>
+    <section>
+        <h2>7. Contact Information</h2>
+        <p>For questions, please contact us via our <a href="{% url 'contact_view' %}">contact form.</a></p>
+    </section>
+</div>
+
+<script src="{% static 'main.js' %}"></script>
+{% endblock content %}

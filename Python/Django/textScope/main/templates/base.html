@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic Categorization Tool</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link rel="stylesheet" href="{% static 'homepage.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+
+<body>
+
+    <!-- Main Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">JEDlabs Tools</h1>
+            <nav class="header-links">
+                <a href="{% url 'homepage' %}" class="{% if current_url == '/' %}active{% endif %}">Home</a>
+                <a href="{% url 'tool_view' %}" class="{% if current_url == '/textScope/' %}active{% endif %}">textScope</a>
+            </nav>
+            <div class="tip-jar">
+                <div class="tip-jar-icons">
+                    <span id="tip-jar-btn" class="tip-icon">💸</span> 
+                    <span id="crypto-tip-btn" class="crypto-icon">₿</span> 
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="content">
+        {% block content %}{% endblock content %}
+
+        <!-- Footer Section -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="{% url 'terms_of_service' %}">Terms of Service</a> |
+                <a href="{% url 'privacy_policy' %}">Privacy Policy</a> |
+                <a href="{% url 'contact_view' %}">Contact Us</a>
+            </div>
+            <p>&copy; {% now 'Y' %} JEDlabs. All Rights Reserved.</p>
+        </footer>
+    </main>
+
+    <!-- Tip Modal -->
+    <div id="tip-modal" class="modal tip-jar-modal">
+        <div class="modal-content">
+            <span id="tipModalClose" class="close">&times;</span>
+            <h3>We ❤️ Tips</h3>
+            <span style="font-size: 0.7rem;">(and not just the advice kind!)</span>
+            <p style="margin-bottom: 1rem;">Every little bit helps us keep building awesome tools. Thanks for making us smile!</p>
+            <div class="card-container">
+                <div class="card">
+                    <img src="{% static 'media/paypal.png' %}" alt="PayPal">
+                    <p>PayPal</p>
+                    <button><a href="https://paypal.me/YourName" target="_blank">Donate</a></button>
+                </div>
+                <div class="card">
+                    <img src="{% static 'media/venmo.png' %}" alt="Venmo">
+                    <p>Venmo</p>
+                    <button><a href="https://venmo.com/YourName" target="_blank">Donate</a></button>
+                </div>
+                <div class="card">
+                    <img src="{% static 'media/cashapp.png' %}" alt="CashApp">
+                    <p>CashApp</p>
+                    <button><a href="https://cashapp.com/YourName" target="_blank">Donate</a></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

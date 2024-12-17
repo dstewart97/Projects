@@ -3,7 +3,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
-from .forms import FileUploadForm, SelectTopicsForm, TopicForm
+from django.core.mail import send_mail, EmailMessage
+from django.conf import settings
+from datetime import datetime
+from .forms import FileUploadForm, SelectTopicsForm, TopicForm, ContactForm
 from .models import Topic
 from io import StringIO
 import time
@@ -11,8 +14,12 @@ import csv
 import json
 
 
-import logging
-logging.basicConfig(level=logging.DEBUG)
+# Footer for Ad compliance
+def homepage(request):
+    return render(request, 'homepage.html', {
+        'current_url': request.path
+    })
+
 
 def handle_uploaded_file(file):
     """Handles file upload and returns the data in a DataFrame."""
@@ -25,7 +32,6 @@ def handle_uploaded_file(file):
 
 
 def process_topics(data, selected_topics, selected_column):
-    logging.debug(f"Selected Topics: {selected_topics}")
     """Process the topics by matching exact phrases in the selected column with the selected topics."""
     # Build the topics dictionary from the selected topics, ensuring case-insensitive matching
     # topics = {topic.key.lower(): [value.lower() for value in topic.values.split(',')] for topic in selected_topics}
@@ -112,17 +118,20 @@ def tool_view(request):
     if request.method == 'POST':
         # Handle Process Data Form
         if 'process_data' in request.POST:
+            selected_column = request.POST.get('selected_column')
+            selected_topics_ids = request.POST.getlist('selected_topics')
+
+            # Check if inputs are missing
+            if not selected_column or not selected_topics_ids:
+                return HttpResponse("Please select a column and at least one topic for categorization.", status=400)
+
+            # Proceed with processing data
             data_json = request.session.get('data')
             if not data_json:
                 return HttpResponse("Session expired or data missing. Please upload a file again.", status=400)
             
             data = pd.read_json(data_json)
-            selected_column = request.POST.get('selected_column')
-            selected_topics_ids = request.POST.getlist('selected_topics')
 
-            if not selected_column or not selected_topics_ids:
-                return HttpResponse("Please select a column and at least one topic for categorization.", status=400)
-            
             permanent_topic_ids = []
             session_topic_keys = []
             
@@ -133,21 +142,25 @@ def tool_view(request):
                     permanent_topic_ids.append(int(topic_id))
 
             permanent_topics = Topic.objects.filter(id__in=permanent_topic_ids)
-
             session_topics_dict = {str(topic['id']): topic for topic in session_topics}
-
-            selected_topics = list(permanent_topics) + list(session_topics_dict.values())
+            selected_topics = list(permanent_topics) + [
+                session_topics_dict[key] for key in session_topic_keys if key in session_topics_dict
+            ]
             
             processed_data = process_topics(data, selected_topics, selected_column)
             request.session['processed_data'] = processed_data.to_json()
             time.sleep(5)
             processed_data_dict = processed_data.head(10).to_dict(orient='records')
+            combined_topics = list(permanent_topics) + session_topics
             return render(request, 'tool_view.html', {
                 'file_uploaded': True,
                 'column_selected': True,
                 'processed_data': processed_data_dict,
+                'topics': combined_topics,
                 'permanent_topics': permanent_topics,
-                'session_topics': session_topics
+                'session_topics': session_topics,
+                'selected_topics': selected_topics,
+                'current_url': request.path
             })
         
         # Handle File Upload
@@ -162,6 +175,7 @@ def tool_view(request):
                 messages.error(request, "Invalid file type...only CSV and XLSX will be processed")
             else:
                 data = handle_uploaded_file(file)
+                time.sleep(2)
                 messages.success(request, "File uploaded successfully...")
                 if data is None:
                     messages.error(request, "Invalid file type...only CSV and XLSX will be processed") 
@@ -169,14 +183,16 @@ def tool_view(request):
                 # Filter columns to include only text columns
                 text_columns = [col for col in data.columns if data[col].dtype == "object"]
                 column_choices = [(col, col) for col in text_columns]
+                combined_topics = list(permanent_topics) + session_topics
                 select_form = SelectTopicsForm(request.POST)
                 return render(request, 'tool_view.html', {
                     'file_uploaded': True,
                     'select_form': select_form,
                     'column_choices': column_choices,
-                    'topics': topics,
+                    'topics': combined_topics,
                     'permanent_topics': permanent_topics,
-                    'session_topics': session_topics
+                    'session_topics': session_topics,
+                    'current_url': request.path
                 })
             
         # Handle Reset
@@ -193,13 +209,13 @@ def tool_view(request):
         'column_selected': False,
         'topics': combined_topics,
         'permanent_topics': permanent_topics,
-        'session_topics': session_topics
+        'session_topics': session_topics,
+        'current_url': request.path
     })
 
 
 
 def add_temp_topic(request):
-    print(f"Received {request.method} request")
     if request.method == 'POST':
         try:
             topic_name = request.POST.get('session_topic_name')
@@ -217,8 +233,11 @@ def add_temp_topic(request):
             }
             # Save it to session
             session_topics = request.session.get('session_topics', [])
+            print(f"Before adding: {session_topics}")
             session_topics.append(new_topic)
             request.session['session_topics'] = session_topics
+            request.session.modified = True
+            print(f"After adding: {request.session.get('session_topics')}")
 
             # Return the newly created topic as JSON response
             return JsonResponse({'success': True, 'topic': new_topic})
@@ -228,3 +247,42 @@ def add_temp_topic(request):
 
     else:
         return JsonResponse({'success': False, 'message': 'Invalid request method'})
+    
+
+# Footer for Ad compliance
+def terms_of_service(request):
+    return render(request, 'terms_of_service.html')
+
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html')
+
+# Contact formn and email submission
+def contact_view(request):
+    if request.method == 'POST':
+        contactForm = ContactForm(request.POST)
+        if contactForm.is_valid():
+            user_email = contactForm.cleaned_data['email']
+            subject = f"New message from {contactForm.cleaned_data['name']}"
+            message = contactForm.cleaned_data['message']
+
+            # Create the email message
+            email = EmailMessage(
+                subject,  # Subject
+                message,  # Message body
+                user_email,  # From the user's email
+                ['textscopeanalytics@gmail.com'],  # To your custom email
+            )
+
+            # Set the "Reply-To" header to the user's email
+            email.reply_to = [user_email]
+
+            # Send the email
+            email.send(fail_silently=False)
+
+            # Display a success message
+            messages.success(request, 'Message sent successfully!' )
+            return redirect('contact_view')
+    else:
+        contactForm = ContactForm()
+
+    return render(request, 'contact.html', {'contactForm': contactForm})
