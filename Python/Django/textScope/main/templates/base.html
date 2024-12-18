@@ -5,7 +5,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Topic Categorization Tool</title>
+    <meta property="og:title" content="Check out this amazing tool!">
+    <meta property="og:description" content="Discover powerful tools to enhance your productivity with textScope.">
+    <!-- iconScout CDN -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <title>JEDlabs Tools</title>
     <link rel="stylesheet" href="{% static 'main.css' %}">
     <link rel="stylesheet" href="{% static 'homepage.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -17,9 +21,14 @@
     <header class="header">
         <div class="header-content">
             <h1 class="logo">JEDlabs Tools</h1>
+            <div class="menu-toggle" aria-label="Toggle Menu">
+                <i class="uil uil-bars"></i>
+            </div>
             <nav class="header-links">
-                <a href="{% url 'homepage' %}" class="{% if current_url == '/' %}active{% endif %}">Home</a>
-                <a href="{% url 'tool_view' %}" class="{% if current_url == '/textScope/' %}active{% endif %}">textScope</a>
+                <ul>
+                    <li><a href="{% url 'homepage' %}" class="{% if current_url == '/' %}active{% endif %}">Home</a></li>
+                    <li><a href="{% url 'tool_view' %}" class="{% if current_url == '/textScope/' %}active{% endif %}">textScope</a></li>
+                </ul>
             </nav>
             <div class="tip-jar">
                 <div class="tip-jar-icons">
@@ -71,5 +80,6 @@
             </div>
         </div>
     </div>
+<script src="{% static 'main.js' %}"></script>
 </body>
 </html>

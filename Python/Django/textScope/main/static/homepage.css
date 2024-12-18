@@ -75,7 +75,7 @@
 
 /* About Section */
 .about {
-    width: 80%;
+    width: 100%;
     text-align: center;
     margin-top: 3rem;
 }
@@ -158,10 +158,10 @@
 
 /* Call to Action */
 .cta {
-    width: 80%;
+    width: 100%;
     margin-top: 5rem;
     margin-bottom: 5rem;
-    padding: 2rem;
+    padding-top: 1rem;
     text-align: center;
     background-color: #FFB198;
     color: white;
@@ -186,4 +186,101 @@
     font-weight: bold;
     background-color: white;
     color: #4C426A;
+}
+
+.share-buttons {
+    margin-top: 1.5rem;
+}
+
+.share-buttons p{
+    margin-bottom: 0.2rem;
+}
+
+.share-buttons a{
+    margin-right: 1rem;
+    font-size: 2rem;
+    background-color: transparent;
+}
+
+.share-buttons a:hover{
+    color: white;
+    transition: all 0.3s ease-in;
+}
+
+
+/* Responsive Design  */
+
+@media screen and (max-width: 1024px) {
+    .hero h1 {
+        font-size: 2.1rem;
+        margin-bottom: 0;
+    }
+    .about-content {
+        padding: 1rem;
+    }
+}
+
+
+@media screen and (max-width: 480px) {
+    .hero {
+        align-items: flex-start;
+    }
+
+    .hero-text {
+        background: transparent;
+        max-width: 100%;
+    }
+    
+    .hero h1 {
+        font-size: 1.4rem;
+        text-align: left;
+        margin-bottom: 0;
+        padding: 0;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .hero p {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero-buttons a {
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .about-content {
+        display: block;
+    }
+
+    .about-text {
+        text-align: center;
+    }
+
+    .about h1 {
+        font-size: 2.3rem;
+        text-align: center;
+    }
+
+    .about p {
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .features h2 {
+        font-size: 1.5rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cta p {
+        font-size: 1rem;
+    }
+
+    .share-buttons a {
+        margin: 0;
+    }
 }

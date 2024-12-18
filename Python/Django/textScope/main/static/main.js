@@ -6,6 +6,19 @@ function updateFileName() {
 };
 
 
+// Hamburger menu in header
+document.addEventListener("DOMContentLoaded", () => {
+    const menuToggle = document.querySelector(".menu-toggle");
+    const headerLinks = document.querySelector(".header-links");
+
+    if (menuToggle) {
+        menuToggle.addEventListener("click", () => {
+            headerLinks.classList.toggle("active");
+        });
+    };
+});
+
+
 
 // Spinner for file upload
 document.addEventListener("DOMContentLoaded", () => {
@@ -29,6 +42,26 @@ document.addEventListener("DOMContentLoaded", () => {
         loadingSpinner.style.display = "none";
         messagesContainer.style.display = "block";
     }, 2000);
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const uploadForm = document.getElementById("upload-form");
+    if (uploadForm) {
+        uploadForm.addEventListener("submit", () => {
+            const loadingSpinner = document.getElementById("loading-spinner");
+            const messagesContainer = document.getElementById("messages-container");
+            if (loadingSpinner && messagesContainer) {
+                loadingSpinner.style.display = "flex";
+                loadingSpinner.style.justifyContent - "center";
+                loadingSpinner.style.alignItems = "center";
+                loadingSpinner.style.flexDirection = "column";
+                loadingSpinner.style.marginTop = "2rem";
+                loadingSpinner.style.marginBottom = "0";
+                messagesContainer.style.display = "none";
+            }
+        });
+    }
 });
 
 
@@ -71,7 +104,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     const url = "/add_temp_topic/";
-    console.log("URL for add_temp_topic: ", url); // Check if the URL renders correctly
 
     // Handle the form submission
     form.addEventListener('submit', function (event) {
@@ -79,14 +111,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Get the form data
         const formData = new FormData(form);
-        console.log('Form data:', formData);
 
         // Convert FormData to a more readable object for debugging
         const formDataObj = {};
         formData.forEach((value, key) => {
             formDataObj[key] = value;
         });
-        console.log('Converted form data:', formDataObj);
 
         const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
@@ -100,7 +130,6 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if (data.success) {
                     // Dynamically append the new topic checkbox
                     const newTopicHTML = `
@@ -128,19 +157,53 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// Search bar functionality for Available Topics
-document.getElementById('topicSearch').addEventListener('keyup', function () {
-    const searchValue = this.value.toLowerCase();
-    const topics = document.querySelectorAll('#topicList .checkbox-group');
 
-    topics.forEach(function (topic) {
-        const topicLabel = topic.querySelector('label').innerText.toLowerCase();
-        if (topicLabel.includes(searchValue)) {
-            topic.style.display = 'block';
-        } else {
-            topic.style.display = 'none';
-        }
+// Search bar functionality for Available Topics
+const topicSearch = document.getElementById('topicSearch')
+if (topicSearch) {
+    topicSearch.addEventListener('keyup', function () {
+        const searchValue = this.value.toLowerCase();
+        const topics = document.querySelectorAll('#topicList .checkbox-group');
+    
+        topics.forEach(function (topic) {
+            const topicLabel = topic.querySelector('label').innerText.toLowerCase();
+            if (topicLabel.includes(searchValue)) {
+                topic.style.display = 'block';
+            } else {
+                topic.style.display = 'none';
+            }
+        });
     });
+};
+
+
+// Get current page url for share on social buttons
+document.addEventListener("DOMContentLoaded", function () {
+    const currentURL = encodeURIComponent(window.location.href);
+    const pageTitle = encodeURIComponent(document.title);
+    const twitterText = "Check out this amazing tool!"
+
+    const twitterBtn = document.getElementById('twitter-share');
+    if (twitterBtn) {
+        twitterBtn.href = `https://twitter.com/intent/tweet?text=${twitterText}&url=${currentURL}`
+    }
+
+    const facebookBtn =document.getElementById('facebook-share');
+    if (facebookBtn) {
+        facebookBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${currentURL}`
+    }
+
+    const linkedinBtn = document.getElementById('linkedin-share');
+    if (linkedinBtn) {
+        linkedinBtn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${currentURL}`
+    }
+
+    const emailBtn = document.getElementById('email-share');
+    if (emailBtn) {
+        const emailSubject = "Check out this Tool";
+        const emailBody = `I found this tool and thought you'd like it: ${window.location.href}`;
+        emailBtn.href = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    }
 });
 
 
@@ -152,9 +215,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var cryptoBtn = document.getElementById("crypto-tip-btn"); // Add this to handle the other button
     var span = document.getElementById("tipModalClose");
 
+    
+
     // When the user clicks the tip button, open the modal
     btn.onclick = function () {
         modal.style.display = "block";
+        console.log("Clicked")
     }
 
     // When the user clicks the crypto button, open the modal (optional action)
@@ -205,3 +271,5 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initial validation
     validateForm();
 });
+
+
