@@ -10,8 +10,8 @@
         <h1>Simplify Text Analytics</h1>
         <p>Analyze, categorize, and explore your text data effortlessly.</p>
         <div class="hero-buttons">
-            <a href="#" class="btn-primary">Try the Tools</a>
-            <a href="#" class="btn-secondary">Support the Site</a>
+            <a href="{% url 'tool_view' %}" class="btn-primary">Try the Tools</a>
+            <a href="#" id="support-site-btn" class="btn-secondary">Support the Site</a>
         </div>
     </div>
 </div>
@@ -63,7 +63,7 @@
 <section class="cta">
     <h2>Enjoying the Tools?</h2>
     <p>Help keep textScope running by leaving a tip or sharing it with others!</p>
-    <a href="#" class="btn-primary">Leave a Tip</a>
+    <a href="#" id="cta-support-site-btn" class="btn-primary">Leave a Tip</a>
     <div class="share-buttons">
         <p>Or share this tool!</p>
         <a id="twitter-share" class="share-btn twitter-btn" target="_blank" aria-label="Share on Twitter">

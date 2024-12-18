@@ -21,28 +21,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // Spinner for file upload
-document.addEventListener("DOMContentLoaded", () => {
-    const uploadForm = document.getElementById("upload-form");
-    const loadingSpinner = document.getElementById("loading-spinner");
-    const messagesContainer = document.getElementById("messages-container");
+// document.addEventListener("DOMContentLoaded", () => {
+//     const uploadForm = document.getElementById("upload-form");
+//     const loadingSpinner = document.getElementById("loading-spinner");
+//     const messagesContainer = document.getElementById("messages-container");
 
-    uploadForm.addEventListener("submit", () => {
-        // Show spinner and hide messages
-        loadingSpinner.style.display = "flex";
-        loadingSpinner.style.justifyContent - "center";
-        loadingSpinner.style.alignItems = "center";
-        loadingSpinner.style.flexDirection = "column";
-        loadingSpinner.style.marginTop = "2rem";
-        loadingSpinner.style.marginBottom = "0";
-        messagesContainer.style.display = "none";
-    });
+//     uploadForm.addEventListener("submit", () => {
+//         // Show spinner and hide messages
+//         loadingSpinner.style.display = "flex";
+//         loadingSpinner.style.justifyContent - "center";
+//         loadingSpinner.style.alignItems = "center";
+//         loadingSpinner.style.flexDirection = "column";
+//         loadingSpinner.style.marginTop = "2rem";
+//         loadingSpinner.style.marginBottom = "0";
+//         messagesContainer.style.display = "none";
+//     });
 
-    // Hide spinner after a delay (if form submission is quick or processed asynch)
-    setTimeout(() => {
-        loadingSpinner.style.display = "none";
-        messagesContainer.style.display = "block";
-    }, 2000);
-});
+//     // Hide spinner after a delay (if form submission is quick or processed asynch)
+//     setTimeout(() => {
+//         loadingSpinner.style.display = "none";
+//         messagesContainer.style.display = "block";
+//     }, 2000);
+// });
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -212,26 +212,50 @@ document.addEventListener('DOMContentLoaded', function () {
     // Get the modal and the button that opens it
     var modal = document.getElementById("tip-modal");
     var btn = document.getElementById("tip-jar-btn");
-    var cryptoBtn = document.getElementById("crypto-tip-btn"); // Add this to handle the other button
+    var cryptoBtn = document.getElementById("crypto-tip-btn"); 
+    var supportBtn = document.getElementById("support-site-btn");
+    var ctaSupportBtn = document.getElementById("cta-support-site-btn");
     var span = document.getElementById("tipModalClose");
 
     
 
     // When the user clicks the tip button, open the modal
-    btn.onclick = function () {
-        modal.style.display = "block";
-        console.log("Clicked")
+    if (btn) {
+        btn.onclick = function () {
+            modal.style.display = "block";
+            console.log("Clicked")
+        }
     }
 
     // When the user clicks the crypto button, open the modal (optional action)
-    cryptoBtn.onclick = function () {
-        modal.style.display = "block";
+    if (cryptoBtn) {
+        cryptoBtn.onclick = function () {
+            modal.style.display = "block";
+        }
     }
 
-    // When the user clicks the close button, close the modal
-    span.onclick = function () {
-        modal.style.display = "none";
+    // When the user clicks the support site button on homepage
+    if (supportBtn) {
+        supportBtn.onclick = function () {
+            modal.style.display = "block";
+        }
     }
+
+    // When the user clicks the support site button on cta box on homepage
+    if (ctaSupportBtn) {
+        ctaSupportBtn.onclick = function () {
+            modal.style.display = "block";
+        }
+    }
+
+
+    // When the user clicks the close button, close the modal
+    if (modal) {
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+    }
+
 
     // When the user clicks anywhere outside the modal, close it
     window.onclick = function (event) {
